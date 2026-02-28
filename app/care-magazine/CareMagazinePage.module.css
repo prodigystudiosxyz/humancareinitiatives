@@ -1,0 +1,172 @@
+.page {
+  padding: 6.25rem 2rem 4.5rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.headerBlock {
+  margin-bottom: 1.5rem;
+}
+
+.headerBlock h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #111827;
+  line-height: 1.1;
+}
+
+.headerBlock p {
+  color: #475569;
+  margin-top: 0.35rem;
+}
+
+.leadGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.leadStory {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.leadStory img {
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  display: block;
+}
+
+.leadContent {
+  padding: 1rem;
+}
+
+.leadContent span {
+  color: #800000;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.leadContent h2 {
+  margin-top: 0.35rem;
+  color: #0f172a;
+  line-height: 1.2;
+  font-size: 1.5rem;
+}
+
+.leadContent p {
+  margin-top: 0.5rem;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.leadContent a {
+  margin-top: 0.65rem;
+  display: inline-block;
+  color: #800000;
+  font-weight: 700;
+}
+
+.highlightColumn {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.highlightItem {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.highlightItem img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.highlightItem h3 {
+  padding: 0.7rem;
+  font-size: 1.02rem;
+  line-height: 1.25;
+  color: #1f2937;
+}
+
+.newsHeading {
+  font-size: 1.4rem;
+  color: #0f172a;
+  border-bottom: 2px solid #800000;
+  width: fit-content;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.85rem;
+}
+
+.newsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.newsCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.newsCard img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.newsContent {
+  padding: 0.8rem;
+}
+
+.newsContent h3 {
+  color: #1f2937;
+  font-size: 1.06rem;
+  line-height: 1.25;
+}
+
+.newsContent p {
+  margin-top: 0.45rem;
+  color: #475569;
+  font-size: 0.91rem;
+}
+
+.newsContent a {
+  margin-top: 0.55rem;
+  display: inline-block;
+  color: #800000;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 980px) {
+  .leadGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 5.5rem 1rem 3.6rem;
+  }
+
+  .leadStory img {
+    height: 220px;
+  }
+
+  .highlightItem img,
+  .newsCard img {
+    height: 165px;
+  }
+}

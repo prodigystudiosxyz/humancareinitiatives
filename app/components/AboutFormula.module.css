@@ -1,0 +1,71 @@
+.section {
+    padding: 100px 20px;
+    background-color: var(--accent-maroon);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 60px;
+    text-align: left;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.formulaRows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* Small gap for the horizontal lines effect */
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    padding: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.row:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.rowLabel {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.rowValue {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.rowValue strong {
+    color: white;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 30px 20px;
+    }
+}

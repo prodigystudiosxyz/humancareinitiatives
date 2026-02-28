@@ -1,0 +1,160 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 5rem;
+    background-color: #ffffff;
+    /* default background */
+}
+
+.headerSection {
+    background-color: #121212;
+    /* dark-grey background like in the image */
+    color: #fff;
+    padding: 4rem 1rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.viewToggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+    border-radius: 50px;
+    background-color: #222;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem;
+    border: 1px solid #333;
+}
+
+.toggleBtn {
+    padding: 0.6rem 2rem;
+    border-radius: 40px;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-family: var(--font-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.toggleBtnActive {
+    background-color: #fff;
+    color: #121212;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.heroText {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    letter-spacing: -1.5px;
+    text-transform: capitalize;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.85);
+    /* Premium white with slight opacity */
+    margin-bottom: 4rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.categoryBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    border-bottom: 2px solid #333;
+    /* The line underneath the whole bar */
+    padding: 1.5rem 0.5rem;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.categoryBtn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    /* White text for categories */
+    font-family: var(--font-main);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.categoryBtn:hover {
+    opacity: 0.8;
+}
+
+.categoryBtnActive {
+    color: #d11234;
+    /* Red color for active item */
+}
+
+/* Removed the ::after underline to match the image */
+
+.mainContent {
+    padding: 4rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.placeholderText {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.mapContainer {
+    width: 100%;
+    min-height: 600px;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #eee;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.mapPlaceholder {
+    text-align: center;
+    color: #666;
+}
+
+.mapTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #121212;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.2rem;
+    }
+
+    .categoryBar {
+        gap: 1.2rem;
+    }
+}

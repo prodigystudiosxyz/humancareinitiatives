@@ -1,0 +1,45 @@
+.statsSection {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 120px 5%;
+    width: 100%;
+}
+
+.statsInner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.statItem {
+    text-align: center;
+    flex: 1;
+}
+
+.value {
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+    .statsInner {
+        flex-direction: column;
+        gap: 3rem;
+    }
+}

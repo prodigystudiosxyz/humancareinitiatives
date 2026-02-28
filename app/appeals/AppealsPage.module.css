@@ -1,0 +1,182 @@
+.page {
+  padding: 6.25rem 2rem 4.5rem;
+  max-width: 1220px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.headerBlock {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.headerBlock h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  color: #111827;
+  margin-bottom: 0.4rem;
+}
+
+.headerBlock p {
+  color: #475569;
+  font-size: 1rem;
+}
+
+.filterRow {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.filterButton,
+.filterActive {
+  border: 1px solid #dbe3ec;
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.filterButton:hover {
+  border-color: #800000;
+  color: #800000;
+}
+
+.filterActive {
+  background: #800000;
+  border-color: #800000;
+  color: #ffffff;
+}
+
+.projectSection {
+  margin-bottom: 2.3rem;
+}
+
+.projectSection h2 {
+  font-size: 1.35rem;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.appealCard {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 26px -22px rgba(15, 23, 42, 0.45);
+}
+
+.appealContent {
+  padding: 1rem;
+}
+
+.appealContent h3 {
+  font-size: 1.15rem;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.appealContent p {
+  font-size: 0.92rem;
+  color: #475569;
+  margin-bottom: 0.75rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.86rem;
+  color: #334155;
+  margin-bottom: 0.45rem;
+}
+
+.stats span:first-child {
+  font-weight: 700;
+  color: #800000;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 9px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #800000 0%, #2e8b57 100%);
+}
+
+.actions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  border-radius: 9px;
+  padding: 0.5rem 0.72rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.primaryBtn {
+  background: #800000;
+  color: #ffffff;
+}
+
+.secondaryBtn {
+  border: 1px solid #d1d5db;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.imageWrap {
+  min-height: 210px;
+}
+
+.appealImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 5.5rem 1rem 3.6rem;
+  }
+
+  .appealCard {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .imageWrap {
+    order: -1;
+    min-height: 180px;
+  }
+}

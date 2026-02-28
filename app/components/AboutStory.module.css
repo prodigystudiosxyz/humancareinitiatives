@@ -1,0 +1,97 @@
+.section {
+    padding: 120px 20px;
+    background-color: #fdfaf8;
+    /* Soft light beige background */
+    color: #1a1a1a;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1000px;
+    /* Narrower container for better readability of the story */
+    margin: 0 auto;
+}
+
+.intro {
+    margin-bottom: 120px;
+    text-align: left;
+    /* Alignment change to match the premium editorial feel */
+}
+
+.introHeadline {
+    font-size: 3.5rem;
+    font-weight: 500;
+    margin-bottom: 0;
+    color: #1a1a1a;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+}
+
+.storyContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+@media (max-width: 968px) {
+    .storyContent {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+.storyTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 48px;
+    color: #1a1a1a;
+    grid-column: 1 / -1;
+    border-bottom: 2px solid rgba(128, 0, 0, 0.1);
+    padding-bottom: 16px;
+}
+
+.column {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.column p {
+    margin-bottom: 32px;
+}
+
+.column p:last-child {
+    margin-bottom: 0;
+}
+
+.highlight {
+    color: var(--accent-maroon);
+    font-weight: 700;
+}
+
+.hexagonMotif {
+    position: absolute;
+    bottom: -150px;
+    right: -150px;
+    width: 600px;
+    height: 600px;
+    background: rgba(0, 0, 0, 0.02);
+    clip-path: var(--hexagon-clip);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hexagonMotifLeft {
+    position: absolute;
+    top: -100px;
+    left: -200px;
+    width: 500px;
+    height: 500px;
+    background: rgba(0, 0, 0, 0.02);
+    clip-path: var(--hexagon-clip);
+    z-index: 0;
+    pointer-events: none;
+}

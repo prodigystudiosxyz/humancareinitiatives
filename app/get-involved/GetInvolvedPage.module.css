@@ -1,0 +1,96 @@
+.page {
+  padding: 6.25rem 2rem 4.5rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.headerBlock {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.headerBlock h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  color: #111827;
+  margin-bottom: 0.4rem;
+}
+
+.headerBlock p {
+  color: #475569;
+  font-size: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.formCard {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.formCard h2 {
+  color: #1f2937;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form input,
+.form select,
+.form textarea {
+  border: 1px solid #d7dfe8;
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.92rem;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #800000;
+  box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.13);
+}
+
+.primaryBtn {
+  margin-top: 0.4rem;
+  border-radius: 9px;
+  background: #800000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.62rem 0.9rem;
+}
+
+.primaryBtn:hover {
+  background: #951313;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 5.5rem 1rem 3.6rem;
+  }
+}

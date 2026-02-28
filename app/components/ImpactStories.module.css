@@ -1,0 +1,171 @@
+.impactSection {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    padding: 120px 5%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.impactInner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 6rem;
+}
+
+/* ===========================
+   Left Side - Headline
+   =========================== */
+.headlineArea {
+    flex: 0 0 35%;
+}
+
+.headline {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #1a1a1a;
+    letter-spacing: -0.03em;
+    margin-top: 0;
+}
+
+.underline {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: var(--accent-maroon);
+    border-radius: 10px;
+}
+
+/* ===========================
+   Right Side - Card Deck
+   =========================== */
+.cardArea {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 550px;
+    position: relative;
+    touch-action: none;
+    /* Critical for drag on mobile */
+}
+
+.cardStack {
+    position: relative;
+    width: 440px;
+    height: 560px;
+}
+
+.storyCard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 32px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.06),
+        0 4px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: grab;
+    user-select: none;
+}
+
+.storyCard:active {
+    cursor: grabbing;
+}
+
+.cardDecoration {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--accent-maroon) 0%, transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.storyTitle {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--accent-maroon);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+}
+
+.storyText {
+    font-size: 1.25rem;
+    color: #333;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.clickHint {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #999;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 2rem;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width: 1024px) {
+    .impactInner {
+        flex-direction: column;
+        text-align: center;
+        gap: 4rem;
+    }
+
+    .headlineArea {
+        flex: 1;
+    }
+
+    .cardArea {
+        width: 100%;
+    }
+
+    .cardStack {
+        padding-right: 30px;
+        /* Space for tilted cards behind */
+    }
+}
+
+@media (max-width: 640px) {
+    .cardStack {
+        width: 320px;
+        height: 440px;
+    }
+
+    .storyTitle {
+        font-size: 1.8rem;
+    }
+
+    .storyText {
+        font-size: 1.1rem;
+    }
+}
