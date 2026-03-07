@@ -68,6 +68,24 @@ export default function ImpactStories() {
                         why we do <br />
                         <span className={styles.underline}>what we do</span>
                     </h2>
+                    <motion.div
+                        className={styles.hexagonOrbit}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 36, repeat: Infinity, ease: 'linear' }}
+                        aria-hidden="true"
+                    >
+                        <svg
+                            viewBox="0 0 100 100"
+                            className={styles.hexagonSvg}
+                            focusable="false"
+                            aria-hidden="true"
+                        >
+                            <polygon
+                                points="50,4 88,26 88,74 50,96 12,74 12,26"
+                                className={styles.hexagonShape}
+                            />
+                        </svg>
+                    </motion.div>
                 </div>
 
                 {/* Right - Draggable Card Deck */}

@@ -28,32 +28,6 @@ export default function DonatePage() {
             <div className={styles.backgroundGlow}></div>
 
             <div className={styles.contentWrapper}>
-                {/* Left Column: Info Setup */}
-                <div className={styles.infoColumn}>
-                    <h1 className={styles.headline}>
-                        Small Acts, <span className={styles.highlight}>Consistent Impact.</span>
-                    </h1>
-                    <p className={styles.description}>
-                        The most beloved deeds to Allah are those that are consistent, even if they are small. Set up a daily or monthly donation and ensure your legacy of giving never stops.
-                    </p>
-
-                    <div className={styles.benefitsList}>
-                        <div className={styles.benefitItem}>
-                            <CheckCircle2 className={styles.checkIcon} size={20} />
-                            <span>100% Donation Policy</span>
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <CheckCircle2 className={styles.checkIcon} size={20} />
-                            <span>Cancel Anytime</span>
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <CheckCircle2 className={styles.checkIcon} size={20} />
-                            <span>Secure Payment</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Column: Interactive Form Card */}
                 <div className={styles.formColumn}>
                     <div className={styles.formCard}>
                         {/* Frequency Toggle */}
@@ -158,6 +132,30 @@ export default function DonatePage() {
                             </div>
                         </div>
 
+                    </div>
+                </div>
+
+                <div className={styles.infoColumn}>
+                    <h1 className={styles.headline}>
+                        Small Acts, <span className={styles.highlight}>Consistent Impact.</span>
+                    </h1>
+                    <p className={styles.description}>
+                        The most beloved deeds to Allah are those that are consistent, even if they are small. Set up a daily or monthly donation and ensure your legacy of giving never stops.
+                    </p>
+
+                    <div className={styles.benefitsGrid}>
+                        <div className={styles.benefitCard}>
+                            <CheckCircle2 className={styles.checkIcon} size={20} />
+                            <span>100% Donation Policy</span>
+                        </div>
+                        <div className={styles.benefitCard}>
+                            <CheckCircle2 className={styles.checkIcon} size={20} />
+                            <span>Cancel Anytime</span>
+                        </div>
+                        <div className={styles.benefitCard}>
+                            <CheckCircle2 className={styles.checkIcon} size={20} />
+                            <span>Secure Payment</span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -48,6 +48,7 @@ export default function Footer() {
                     <ul>
                         <li><Link href="/donate-zakat">Donate Zakat</Link></li>
                         <li><Link href="/donate-sadaqah">Donate Sadaqah</Link></li>
+                        <li><Link href="/appeals">Appeals</Link></li>
                     </ul>
                 </div>
             </div>

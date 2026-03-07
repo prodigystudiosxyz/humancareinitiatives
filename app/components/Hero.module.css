@@ -4,7 +4,7 @@
 .heroSection {
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(160deg, #0d7a42 0%, #12944e 25%, #18a85a 50%, #0f8646 80%, #0a6e3a 100%);
+    background: linear-gradient(160deg, #084d2c 0%, #0b5f35 25%, #117342 50%, #0d6539 80%, #074927 100%);
     position: relative;
     overflow: hidden;
     display: flex;

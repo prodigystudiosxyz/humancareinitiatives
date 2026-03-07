@@ -5,8 +5,8 @@
   --secondary-text: #ffffff;
   --accent-maroon: #800000;
   --accent-maroon-light: #a31a1a;
-  --accent-green: #2e8b57;
-  --accent-green-light: #3cb371;
+  --accent-green: #1f6f46;
+  --accent-green-light: #2a8a57;
 
   --header-height: 80px;
 
@@ -111,7 +111,7 @@ svg {
 }
 
 .btn-primary {
-  background-color: var(--accent-maroon);
+  background-color: #000;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -123,12 +123,49 @@ svg {
 }
 
 .btn-primary:hover {
+  background-color: #1f1f1f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.12);
+}
+
+.btn-accent-maroon {
+  background-color: var(--accent-maroon);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-accent-maroon:hover {
   background-color: var(--accent-maroon-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(128, 0, 0, 0.2);
 }
 
-.btn-secondary {
+.btn-accent-green {
   background-color: var(--accent-green);
   color: #fff;
   padding: 0.75rem 1.5rem;
@@ -140,7 +177,7 @@ svg {
   justify-content: center;
 }
 
-.btn-secondary:hover {
+.btn-accent-green:hover {
   background-color: var(--accent-green-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(46, 139, 87, 0.2);

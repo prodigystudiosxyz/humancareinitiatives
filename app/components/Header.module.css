@@ -340,7 +340,9 @@
     }
 
     .mobileActions :global(.btn-primary),
-    .mobileActions :global(.btn-secondary) {
+    .mobileActions :global(.btn-secondary),
+    .mobileActions :global(.btn-accent-maroon),
+    .mobileActions :global(.btn-accent-green) {
         width: 100%;
         justify-content: center;
         font-size: 0.9rem;

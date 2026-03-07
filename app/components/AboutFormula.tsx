@@ -22,7 +22,12 @@ const formulaData = [
         ),
     },
     {
-        label: 'The Human Care Formula',
+        label: (
+            <span className={styles.rowLabelSplit}>
+                <span>The Human</span>
+                <span>Care Formula</span>
+            </span>
+        ),
         content: (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <p>

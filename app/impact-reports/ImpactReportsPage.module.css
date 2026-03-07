@@ -53,7 +53,7 @@
   align-items: center;
   gap: 0.4rem;
   width: fit-content;
-  background: #800000;
+  background: #000000;
   color: #ffffff;
   border-radius: 9px;
   padding: 0.5rem 0.8rem;
@@ -62,7 +62,7 @@
 }
 
 .downloadBtn:hover {
-  background: #951313;
+  background: #1f1f1f;
 }
 
 @media (max-width: 720px) {

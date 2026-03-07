@@ -87,6 +87,9 @@ export default function Header() {
                     </div>
                 </div>
 
+                <Link href="/get-involved" className={styles.navLink} onClick={closeMobileMenu}>Get involved</Link>
+                <Link href="/appeals" className={styles.navLink} onClick={closeMobileMenu}>Appeals</Link>
+
                 <div className={`${styles.dropdownContainer} ${openDropdown === 'projects' ? styles.dropdownOpen : ''}`}>
                     <button
                         type="button"
@@ -104,13 +107,11 @@ export default function Header() {
                     </div>
                 </div>
 
-                <Link href="/get-involved" className={styles.navLink} onClick={closeMobileMenu}>Get involved</Link>
-
                 <div className={styles.mobileActions}>
-                    <Link href="/donate" className="btn-primary" onClick={closeMobileMenu}>
+                    <Link href="/donate" className="btn-accent-maroon" onClick={closeMobileMenu}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Zakat
                     </Link>
-                    <Link href="/donate" className="btn-secondary" onClick={closeMobileMenu}>
+                    <Link href="/donate" className="btn-accent-green" onClick={closeMobileMenu}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Sadaqah
                     </Link>
                     <Link href="/account" className={styles.mobileAccountLink} onClick={closeMobileMenu}>
@@ -121,10 +122,10 @@ export default function Header() {
 
             <div className={styles.actions}>
                 <div className={styles.donateButtons}>
-                    <Link href="/donate" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+                    <Link href="/donate" className="btn-accent-maroon" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Zakat
                     </Link>
-                    <Link href="/donate" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+                    <Link href="/donate" className="btn-accent-green" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Sadaqah
                     </Link>
                 </div>

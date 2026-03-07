@@ -49,6 +49,13 @@
 .rowLabel {
     font-size: 1.5rem;
     font-weight: 700;
+    line-height: 1.15;
+}
+
+.rowLabelSplit {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.15rem;
 }
 
 .rowValue {

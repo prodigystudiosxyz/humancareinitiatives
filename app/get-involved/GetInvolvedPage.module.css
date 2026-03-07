@@ -78,7 +78,7 @@
 .primaryBtn {
   margin-top: 0.4rem;
   border-radius: 9px;
-  background: #800000;
+  background: #000000;
   color: #ffffff;
   font-weight: 700;
   font-size: 0.9rem;
@@ -86,7 +86,7 @@
 }
 
 .primaryBtn:hover {
-  background: #951313;
+  background: #1f1f1f;
 }
 
 @media (max-width: 720px) {
