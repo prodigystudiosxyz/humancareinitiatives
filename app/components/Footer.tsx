@@ -60,7 +60,6 @@ export default function Footer() {
                     <div className={styles.socialWrap}>
                         <span className={styles.followLabel}>Follow us:</span>
                         <Link href="#" aria-label="Facebook"><Facebook size={18} /></Link>
-                        <Link href="#" aria-label="Twitter"><Twitter size={18} /></Link>
                         <Link href="#" aria-label="Instagram"><Instagram size={18} /></Link>
                         <Link href="#" aria-label="LinkedIn"><Linkedin size={18} /></Link>
                     </div>

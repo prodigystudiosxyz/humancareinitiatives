@@ -1,0 +1,312 @@
+.container {
+    background-color: #f7f7f7;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 5rem;
+}
+
+.headerSection {
+    display: none;
+    /* Hidden to match the screenshot structure where there is no big header above */
+}
+
+.mainContent {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 3rem;
+    padding: 3rem 2rem;
+}
+
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #d1d5db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.searchIconWrapper {
+    color: #6b21a8;
+    /* we will use brand accent if needed, using a soft purple/dark per the screenshot structure, but user said use current palette, so let's use #800000 or a neutral */
+    color: #800000;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: #4b5563;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: #9ca3af;
+}
+
+.filterSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filterTitle {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #6b21a8;
+    /* Using the purple from the image as accent, wait user said "use our current color palette". OK, I will use #800000 */
+    color: #800000;
+    margin: 0;
+}
+
+.resetLink {
+    font-size: 0.9rem;
+    color: #800000;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.resetLink:hover {
+    color: #951313;
+}
+
+.divider {
+    height: 1px;
+    background-color: #d1d5db;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.filterGroup {
+    margin-bottom: 1.5rem;
+}
+
+.filterGroupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.filterGroupTitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #800000;
+    /* Replaced purple with current accent */
+    margin: 0;
+}
+
+.dropdownIcon {
+    color: #9ca3af;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox:checked {
+    background-color: #800000;
+    border-color: #800000;
+}
+
+.checkbox:checked::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 1px;
+}
+
+.checkboxText {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.count {
+    color: #9ca3af;
+    margin-left: 0.3rem;
+    font-size: 0.85rem;
+}
+
+/* Main Section */
+.mainSection {
+    flex: 1;
+    min-width: 0;
+}
+
+.subprojectsList {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.emptyState {
+    background: #fff;
+    border: 1px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+    color: #6b7280;
+}
+
+/* Card Styling */
+.subprojectCard {
+    display: flex;
+    flex-direction: row;
+    background: #fdfdfd;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    /* Bottom border based on the screenshot */
+    border-bottom: 4px solid #800000;
+}
+
+.subprojectCard:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.cardImageWrapper {
+    width: 50%;
+    min-width: 300px;
+    position: relative;
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cardContentWrapper {
+    width: 50%;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f3f4f6;
+}
+
+.cardHeader {
+    margin-bottom: 1rem;
+}
+
+.cardTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #800000;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.cardDescription {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.7;
+    margin: 0 0 2rem 0;
+}
+
+.cardFooter {
+    margin-top: auto;
+}
+
+.viewBtn {
+    background: transparent;
+    border: 1px solid #800000;
+    color: #800000;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    width: 100%;
+    max-width: 250px;
+    transition: all 0.2s ease;
+}
+
+.viewBtn:hover {
+    background: var(--accent-green);
+    color: white;
+}
+
+.arrow {
+    transition: transform 0.2s ease;
+}
+
+.viewBtn:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 900px) {
+    .mainContent {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .subprojectCard {
+        flex-direction: column;
+    }
+
+    .cardImageWrapper,
+    .cardContentWrapper {
+        width: 100%;
+    }
+
+    .cardImageWrapper {
+        height: 250px;
+    }
+}

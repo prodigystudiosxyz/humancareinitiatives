@@ -7,16 +7,16 @@ import styles from './AppealsPage.module.css';
 import { appeals, type Appeal } from './data';
 
 export default function AppealsPage() {
-  const [projectFilter, setProjectFilter] = useState('All Projects');
+  const [projectFilter, setProjectFilter] = useState('All Appeals');
 
   const projects = useMemo(
-    () => ['All Projects', ...Array.from(new Set(appeals.map((appeal) => appeal.project)))],
+    () => ['All Appeals', ...Array.from(new Set(appeals.map((appeal) => appeal.project)))],
     [],
   );
 
   const groupedAppeals = useMemo(() => {
     const visibleAppeals =
-      projectFilter === 'All Projects'
+      projectFilter === 'All Appeals'
         ? appeals
         : appeals.filter((appeal) => appeal.project === projectFilter);
 

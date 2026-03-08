@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from './ProjectsSection.module.css';
 
 interface Project {
@@ -16,30 +17,30 @@ interface Project {
 const projects: Project[] = [
     // Sustainable Projects
     {
-        id: 's1',
+        id: 'blind-girls-project',
         category: 'sustainable',
-        name: 'Deep Tube Wells Program',
-        summary: 'Installation of high-capacity deep tube wells providing safe, arsenic-free drinking water to remote rural households.',
-        raised: '£38,450',
+        name: 'Blind Girls Project',
+        summary: 'This program supports visually impaired girls by providing accommodation, education support, and rehabilitation services.',
+        raised: '£25,000',
         goal: '£50,000',
-        progress: 76,
+        progress: 50,
         thumbnail: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800'
     },
     {
-        id: 's2',
+        id: 'livelihood-project',
         category: 'sustainable',
-        name: 'Women Empowerment Hubs',
-        summary: 'Equipping rural women with tailoring, handicraft, and entrepreneurship skills to build sustainable livelihoods.',
+        name: 'Livelihood Project',
+        summary: 'This program provides income-generating assets such as sewing machines, rickshaws, and small business capital to help vulnerable families build sustainable livelihoods.',
         raised: '£12,200',
         goal: '£25,000',
         progress: 48,
         thumbnail: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800'
     },
     {
-        id: 's3',
+        id: 'orphan-care',
         category: 'sustainable',
-        name: 'Climate Resilience Afforestation',
-        summary: 'Restoring coastal ecosystems through large-scale mangrove planting to protect against cyclonic surges.',
+        name: 'Orphan Care',
+        summary: 'This program supports orphan children by providing accommodation, food, education expenses, and essential care to ensure they can continue their studies in a safe and supportive environment.',
         raised: '£5,600',
         goal: '£10,000',
         progress: 56,
@@ -47,30 +48,30 @@ const projects: Project[] = [
     },
     // Emergency Projects
     {
-        id: 'e1',
+        id: 'safe-water-access',
         category: 'emergency',
-        name: 'Monsoon Flood Response',
-        summary: 'Rapid deployment of life-saving food, water purification kits, and medical aid to submerged districts.',
+        name: 'Safe Water Access',
+        summary: 'This program installs deep tube wells to provide safe and clean drinking water to communities suffering from water scarcity or contaminated water sources.',
         raised: '£85,000',
         goal: '£100,000',
         progress: 85,
         thumbnail: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800'
     },
     {
-        id: 'e2',
+        id: 'emergency-food-assistance',
         category: 'emergency',
-        name: 'Mobile Medical Camps',
-        summary: 'Providing free health consultations and essential medicines through mobile clinics in remote off-grid areas.',
+        name: 'Emergency Food Assistance',
+        summary: 'This program provides emergency food assistance to families affected by floods, flash floods, and other natural disasters in Bangladesh.',
         raised: '£7,400',
         goal: '£15,000',
         progress: 49,
         thumbnail: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800'
     },
     {
-        id: 'e3',
+        id: 'winter-relief',
         category: 'emergency',
-        name: 'Winter Warmth Initiative',
-        summary: 'Distribution of high-quality blankets and warm clothing to vulnerable families during severe cold waves.',
+        name: 'Winter Relief',
+        summary: 'This seasonal program distributes blankets, sweaters, jackets, and other winter clothing to vulnerable communities in cold-prone areas of Bangladesh, especially the elderly, children, and extremely poor households.',
         raised: '£14,800',
         goal: '£20,000',
         progress: 74,
@@ -138,11 +139,19 @@ export default function ProjectsSection() {
                             <p className={styles.projectSummary}>{project.summary}</p>
 
                             <div className={styles.donateAction}>
-                                <button className={styles.donateNowBtn}>Donate Now</button>
+                                <Link href={`/appeals/${project.id}`} className={styles.donateNowBtn}>
+                                    Donate Now
+                                </Link>
                             </div>
                         </div>
                     </div>
                 ))}
+            </div>
+
+            <div className={styles.viewAllContainer}>
+                <Link href="/our-projects" className={styles.viewAllBtn}>
+                    View All Projects <span className={styles.arrow}>→</span>
+                </Link>
             </div>
         </section>
     );

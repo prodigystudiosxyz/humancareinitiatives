@@ -34,6 +34,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     { href: '/admin/impact-stories', label: 'Impact Stories', count: stories.length },
     { href: '/admin/impact-reports', label: 'Impact Reports', count: reports.length },
     { href: '/admin/blog', label: 'Blog Articles', count: articles.length },
+    { href: '/admin/settings', label: 'Settings' },
   ];
 
   return (

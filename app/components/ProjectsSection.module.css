@@ -234,6 +234,47 @@
 }
 
 /* ===========================
+   View All Projects
+   =========================== */
+.viewAllContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.viewAllBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 100px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.viewAllBtn:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.viewAllBtn:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* ===========================
    Responsive
    =========================== */
 @media (max-width: 1024px) {

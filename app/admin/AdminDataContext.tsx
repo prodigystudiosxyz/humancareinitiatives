@@ -15,6 +15,7 @@ import {
   ArticleItem,
   FeaturedAppeals,
   GalleryItem,
+  HeroConfig,
   Project,
   ReportItem,
   StoryItem,
@@ -30,6 +31,7 @@ type AdminSnapshot = {
   stories: StoryItem[];
   reports: ReportItem[];
   articles: ArticleItem[];
+  heroConfig: HeroConfig;
 };
 
 type AdminDataContextValue = {
@@ -50,6 +52,8 @@ type AdminDataContextValue = {
   setReports: Dispatch<SetStateAction<ReportItem[]>>;
   articles: ArticleItem[];
   setArticles: Dispatch<SetStateAction<ArticleItem[]>>;
+  heroConfig: HeroConfig;
+  setHeroConfig: Dispatch<SetStateAction<HeroConfig>>;
 };
 
 const DEFAULT_DATA: AdminSnapshot = {
@@ -79,6 +83,13 @@ const DEFAULT_DATA: AdminSnapshot = {
       status: 'Published',
     },
   ],
+  heroConfig: {
+    activeHero: 'primary',
+    heading: 'Together, we can build a better tomorrow',
+    backgroundImage: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80',
+    ctaText: 'Discover Our Impact',
+    ctaLink: '#projects',
+  },
 };
 
 const AdminDataContext = createContext<AdminDataContextValue | null>(null);
@@ -98,6 +109,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [stories, setStories] = useState<StoryItem[]>(DEFAULT_DATA.stories);
   const [reports, setReports] = useState<ReportItem[]>(DEFAULT_DATA.reports);
   const [articles, setArticles] = useState<ArticleItem[]>(DEFAULT_DATA.articles);
+  const [heroConfig, setHeroConfig] = useState<HeroConfig>(DEFAULT_DATA.heroConfig);
 
   useEffect(() => {
     try {
@@ -111,6 +123,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
         if (parsed.stories) setStories(parsed.stories);
         if (parsed.reports) setReports(parsed.reports);
         if (parsed.articles) setArticles(parsed.articles);
+        if (parsed.heroConfig) setHeroConfig(parsed.heroConfig);
       }
     } catch {
       // Keep default data when local storage is malformed.
@@ -130,6 +143,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       stories,
       reports,
       articles,
+      heroConfig,
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
@@ -142,6 +156,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     stories,
     reports,
     articles,
+    heroConfig,
   ]);
 
   const showMessage = (value: string) => {
@@ -168,6 +183,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       setReports,
       articles,
       setArticles,
+      heroConfig,
+      setHeroConfig,
     }),
     [
       isHydrated,
@@ -179,6 +196,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       stories,
       reports,
       articles,
+      heroConfig,
     ],
   );
 

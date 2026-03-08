@@ -42,3 +42,11 @@ export type FeaturedAppeals = {
   first: number;
   second: number;
 };
+
+export type HeroConfig = {
+  activeHero: 'primary' | 'secondary';
+  heading: string;
+  backgroundImage: string;
+  ctaText: string;
+  ctaLink: string;
+};

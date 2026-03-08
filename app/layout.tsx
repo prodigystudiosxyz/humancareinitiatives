@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { AdminDataProvider } from './admin/AdminDataContext';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -24,9 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={plusJakarta.variable}>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <AdminDataProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </AdminDataProvider>
       </body>
     </html>
   );

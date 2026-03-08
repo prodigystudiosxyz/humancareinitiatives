@@ -44,16 +44,13 @@ function FlipCard({ title, subtitle, backTitle, iconSrc, donateHref }: FlipCardP
             <div className={styles.cardInner}>
                 {/* ===== Front Face ===== */}
                 <div className={`${styles.cardFace} ${styles.cardFront}`}>
-                    <div className={styles.cardIconArea}>
-                        <img
-                            src={iconSrc}
-                            alt=""
-                            width={100}
-                            height={100}
-                        />
+                    <div className={styles.cardContent}>
+                        <h3 className={styles.cardTitle}>{title}</h3>
+                        <p className={styles.cardSubtitle}>{subtitle}</p>
                     </div>
-                    <h3 className={styles.cardTitle}>{title}</h3>
-                    <p className={styles.cardSubtitle}>{subtitle}</p>
+                    <div className={styles.cardIconArea}>
+                        <img src={iconSrc} alt={title} className={styles.cardIcon} />
+                    </div>
                 </div>
 
                 {/* ===== Back Face ===== */}
@@ -139,16 +136,16 @@ export default function Hero() {
                         title="I want to make sustainable impact"
                         subtitle="Create sustainable, long-term impact that empowers communities to uplift themselves for generations"
                         backTitle="Sustainable Impact"
-                        iconSrc="/sustainable-impact-v6.png"
-                        donateHref="/donate-sadaqah"
+                        iconSrc="/orphan_boy_1_v4.png"
+                        donateHref="/donate"
                     />
 
                     <FlipCard
                         title="I want to solve emergency needs now"
                         subtitle="Deliver rapid, life-saving support that stabilises communities and restores hope in moments of crisis"
                         backTitle="Immediate Impact"
-                        iconSrc="/emergency-impact-v6.png"
-                        donateHref="/donate-zakat"
+                        iconSrc="/orphan_boy_2_v4.png"
+                        donateHref="/donate"
                     />
                 </div>
             </div>

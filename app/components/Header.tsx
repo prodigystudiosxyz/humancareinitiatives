@@ -78,7 +78,7 @@ export default function Header() {
                         onClick={() => toggleDropdown('impact')}
                         aria-expanded={openDropdown === 'impact'}
                     >
-                        Our Impact <ChevronDown size={16} />
+                        Impact <ChevronDown size={16} />
                     </button>
                     <div className={styles.dropdownMenu}>
                         <Link href="/impact-reports" className={styles.dropdownLink} onClick={closeMobileMenu}>Impact reports</Link>
@@ -97,13 +97,13 @@ export default function Header() {
                         onClick={() => toggleDropdown('projects')}
                         aria-expanded={openDropdown === 'projects'}
                     >
-                        Our projects <ChevronDown size={16} />
+                        Projects <ChevronDown size={16} />
                     </button>
                     <div className={styles.dropdownMenu}>
                         <Link href="/our-projects" className={styles.dropdownLink} onClick={closeMobileMenu}>All Projects</Link>
-                        <Link href="/1" className={styles.dropdownLink} onClick={closeMobileMenu}>1</Link>
-                        <Link href="/2" className={styles.dropdownLink} onClick={closeMobileMenu}>2</Link>
-                        <Link href="/3" className={styles.dropdownLink} onClick={closeMobileMenu}>3</Link>
+                        <Link href="/our-projects/humanitarian-emergency-response" className={styles.dropdownLink} onClick={closeMobileMenu}>Emergency Response</Link>
+                        <Link href="/our-projects/education-support-child-development" className={styles.dropdownLink} onClick={closeMobileMenu}>Education Support</Link>
+                        <Link href="/our-projects/wash-program" className={styles.dropdownLink} onClick={closeMobileMenu}>WASH Program</Link>
                     </div>
                 </div>
 

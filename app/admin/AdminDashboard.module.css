@@ -239,12 +239,12 @@
 }
 
 .primaryBtn {
-  background: #800000;
+  background: var(--accent-green);
   color: #ffffff;
 }
 
 .primaryBtn:hover {
-  background: #951212;
+  background: var(--accent-green-light);
 }
 
 .secondaryBtn {
@@ -254,8 +254,8 @@
 }
 
 .secondaryBtn:hover {
-  border-color: #800000;
-  color: #800000;
+  border-color: var(--accent-green);
+  color: var(--accent-green);
 }
 
 .dangerBtn {

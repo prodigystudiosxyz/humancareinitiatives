@@ -43,7 +43,7 @@
 
 .submitBtn {
     padding: 1rem 2.5rem;
-    background-color: #1a1a1a;
+    background-color: var(--accent-green);
     color: #ffffff;
     border-radius: 100px;
     font-weight: 800;
@@ -53,7 +53,7 @@
 }
 
 .submitBtn:hover {
-    background-color: var(--accent-maroon, #800000);
+    background-color: var(--accent-green-light);
     transform: scale(1.05);
 }
 

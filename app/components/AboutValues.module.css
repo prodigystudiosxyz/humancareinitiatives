@@ -45,14 +45,21 @@
 .iconWrapper {
     width: 56px;
     height: 56px;
-    border-radius: 16px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
-    background-color: rgba(128, 0, 0, 0.05);
-    /* Soft maroon tint */
-    color: var(--accent-maroon);
+    background: linear-gradient(135deg, #22b566 0%, #1a9e55 100%);
+    /* Green circular background */
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(34, 181, 102, 0.12);
+}
+
+.iconWrapper svg {
+    /* Ensure lucide/react SVG strokes inherit white */
+    stroke: #fff;
+    color: #fff;
 }
 
 .cardTitle {

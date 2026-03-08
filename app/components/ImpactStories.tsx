@@ -4,6 +4,33 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-mo
 import { ArrowRight } from 'lucide-react';
 import styles from './ImpactStories.module.css';
 
+const HexagonMotif = ({ className, strokeWidth = 1 }: { className?: string, strokeWidth?: number }) => (
+    <svg
+        viewBox="0 0 100 100"
+        className={className}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+    >
+        {/* Mathematically defined 6-hexagon ring */}
+        {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+            const rad = (angle * Math.PI) / 180;
+            const dist = 22;
+            const cx = 50 + Math.cos(rad) * dist;
+            const cy = 50 + Math.sin(rad) * dist;
+            const r = 18; // radius of each hexagon
+
+            const points = [];
+            for (let j = 0; j < 6; j++) {
+                const hRad = ((j * 60 + 30) * Math.PI) / 180;
+                points.push(`${cx + r * Math.cos(hRad)},${cy + r * Math.sin(hRad)}`);
+            }
+
+            return <polygon key={i} points={points.join(' ')} />;
+        })}
+    </svg>
+);
+
 interface Story {
     id: number;
     title: string;
@@ -68,24 +95,9 @@ export default function ImpactStories() {
                         why we do <br />
                         <span className={styles.underline}>what we do</span>
                     </h2>
-                    <motion.div
-                        className={styles.hexagonOrbit}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 36, repeat: Infinity, ease: 'linear' }}
-                        aria-hidden="true"
-                    >
-                        <svg
-                            viewBox="0 0 100 100"
-                            className={styles.hexagonSvg}
-                            focusable="false"
-                            aria-hidden="true"
-                        >
-                            <polygon
-                                points="50,4 88,26 88,74 50,96 12,74 12,26"
-                                className={styles.hexagonShape}
-                            />
-                        </svg>
-                    </motion.div>
+                    <div className={styles.hexagonBackground}>
+                        <HexagonMotif className={styles.hexagonSvg} strokeWidth={1} />
+                    </div>
                 </div>
 
                 {/* Right - Draggable Card Deck */}

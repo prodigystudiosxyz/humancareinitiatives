@@ -1,5 +1,5 @@
 .section {
-    padding: 120px 20px;
+    padding: 60px 12px;
     background-color: #fdfaf8;
     /* Soft light beige background */
     color: #1a1a1a;
@@ -14,9 +14,9 @@
 }
 
 .intro {
-    margin-bottom: 120px;
+    margin-bottom: 40px;
     text-align: left;
-    /* Alignment change to match the premium editorial feel */
+    /* Reduced spacing between intro and story content */
 }
 
 .introHeadline {
@@ -32,7 +32,7 @@
 .storyContent {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 32px;
     align-items: start;
 }
 
@@ -46,11 +46,11 @@
 .storyTitle {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 48px;
+    margin-bottom: 20px;
     color: #1a1a1a;
     grid-column: 1 / -1;
     border-bottom: 2px solid rgba(128, 0, 0, 0.1);
-    padding-bottom: 16px;
+    padding-bottom: 12px;
 }
 
 .column {
@@ -60,7 +60,7 @@
 }
 
 .column p {
-    margin-bottom: 32px;
+    margin-bottom: 18px;
 }
 
 .column p:last-child {

@@ -21,7 +21,7 @@ export default function Newsletter() {
                     </button>
                 </div>
                 <p className={styles.privacy}>
-                    Stay updated with real stories of impact. No spam, only hope.
+                    Stay updated with real stories of impact. No spam
                 </p>
             </div>
         </section>

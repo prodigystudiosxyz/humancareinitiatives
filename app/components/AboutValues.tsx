@@ -8,7 +8,7 @@ import styles from './AboutValues.module.css';
 const valuesData = [
     {
         title: 'Care',
-        description: 'We try to look and act beyond the material and metrics. Data matters, but people matter more. We try our best to listen to our brothers and sisters in need, and attempt to walk in their shoes, not for marketing, but to design better programmes and processes so your pound goes further.',
+        description: 'We try to look and act beyond the material and metrics. We try our best to listen to our brothers and sisters, and attempt to walk in their shoes, not for marketing, but to design better programmes and processes so your pound goes further.',
         icon: <Heart size={28} />
     },
     {

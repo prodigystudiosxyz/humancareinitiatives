@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Play } from 'lucide-react';
 import styles from './ImpactGalleryPage.module.css';
 
 type GalleryItem = {
@@ -10,6 +11,7 @@ type GalleryItem = {
   category: string;
   image: string;
   tone: 'maroon' | 'green' | 'purple' | 'blue';
+  type: 'image' | 'video';
 };
 
 const categoryOrder = [
@@ -31,6 +33,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Livelihood',
     image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=900&q=80',
     tone: 'maroon',
+    type: 'video',
   },
   {
     id: 2,
@@ -39,6 +42,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Education',
     image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
     tone: 'green',
+    type: 'image',
   },
   {
     id: 3,
@@ -47,6 +51,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Children',
     image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
     tone: 'blue',
+    type: 'video',
   },
   {
     id: 4,
@@ -55,6 +60,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Water',
     image: 'https://images.unsplash.com/photo-1459183885421-5cc683b8dbba?auto=format&fit=crop&w=900&q=80',
     tone: 'purple',
+    type: 'image',
   },
   {
     id: 5,
@@ -63,6 +69,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Mothers',
     image: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80',
     tone: 'maroon',
+    type: 'video',
   },
   {
     id: 6,
@@ -71,6 +78,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Health',
     image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=900&q=80',
     tone: 'green',
+    type: 'image',
   },
   {
     id: 7,
@@ -79,6 +87,7 @@ const galleryItems: GalleryItem[] = [
     category: 'Food',
     image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80',
     tone: 'blue',
+    type: 'video',
   },
   {
     id: 8,
@@ -87,12 +96,16 @@ const galleryItems: GalleryItem[] = [
     category: 'Children',
     image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80',
     tone: 'purple',
+    type: 'image',
   },
 ];
+
+type MediaFilterType = 'All' | 'Images' | 'Videos';
 
 export default function ImpactGalleryPage() {
   const [yearFilter, setYearFilter] = useState('All Years');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [mediaFilter, setMediaFilter] = useState<MediaFilterType>('All');
 
   const years = useMemo(
     () => ['All Years', ...Array.from(new Set(galleryItems.map((item) => item.year))).sort((a, b) => b - a)],
@@ -103,14 +116,45 @@ export default function ImpactGalleryPage() {
     return galleryItems.filter((item) => {
       const yearMatch = yearFilter === 'All Years' || item.year === Number(yearFilter);
       const categoryMatch = categoryFilter === 'All' || item.category === categoryFilter;
-      return yearMatch && categoryMatch;
+
+      let mediaMatch = true;
+      if (mediaFilter === 'Images') mediaMatch = item.type === 'image';
+      if (mediaFilter === 'Videos') mediaMatch = item.type === 'video';
+
+      return yearMatch && categoryMatch && mediaMatch;
     });
-  }, [yearFilter, categoryFilter]);
+  }, [yearFilter, categoryFilter, mediaFilter]);
 
   return (
     <section className={styles.page}>
       <div className={styles.headerBlock}>
         <h1>Impact Gallery</h1>
+      </div>
+
+      <div className={styles.mediaToggleRow}>
+        <div className={styles.toggleGroup}>
+          <button
+            type="button"
+            className={(mediaFilter === 'All' ? styles.toggleActive : styles.toggleBtn)}
+            onClick={() => setMediaFilter('All')}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            className={(mediaFilter === 'Images' ? styles.toggleActive : styles.toggleBtn)}
+            onClick={() => setMediaFilter('Images')}
+          >
+            Images
+          </button>
+          <button
+            type="button"
+            className={(mediaFilter === 'Videos' ? styles.toggleActive : styles.toggleBtn)}
+            onClick={() => setMediaFilter('Videos')}
+          >
+            Videos
+          </button>
+        </div>
       </div>
 
       <div className={styles.filterRow}>
@@ -146,6 +190,11 @@ export default function ImpactGalleryPage() {
           <article className={styles.card} key={item.id}>
             <div className={`${styles.imageShell} ${styles[item.tone]}`}>
               <img src={item.image} alt={item.title} className={styles.image} />
+              {item.type === 'video' && (
+                <div className={styles.playOverlay}>
+                  <Play fill="white" size={36} color="white" />
+                </div>
+              )}
             </div>
             <h2>{item.title}</h2>
           </article>
