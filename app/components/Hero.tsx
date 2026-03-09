@@ -1,20 +1,34 @@
 'use client';
 import React, { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
 import styles from './Hero.module.css';
+import { projectsData } from '../our-projects/projectsData';
 
 interface FlipCardProps {
     title: string;
     subtitle: string;
     backTitle: string;
-    iconSrc: string;
     donateHref: string;
+    projectCategory: string; // 'Sustainable' or 'Emergency'
 }
 
-function FlipCard({ title, subtitle, backTitle, iconSrc, donateHref }: FlipCardProps) {
+function FlipCard({ title, subtitle, backTitle, donateHref, projectCategory }: FlipCardProps) {
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
     const [customAmount, setCustomAmount] = useState('');
     const [isFlipped, setIsFlipped] = useState(false);
+    const [selectedSubproject, setSelectedSubproject] = useState('');
+
+    // Filter projects based on category
+    // Using simple mapping: Sustainable -> 'livelihood-economic-empowerment' etc.
+    // For now, let's just grab subprojects from relevant categories
+    const relevantProjects = projectsData.filter(p => {
+        if (projectCategory === 'Sustainable') {
+            return ['livelihood-economic-empowerment', 'education-support-child-development', 'wash-program'].includes(p.id);
+        } else {
+            return ['humanitarian-emergency-response', 'religious-seasonal-welfare'].includes(p.id);
+        }
+    });
+
+    const allSubprojects = relevantProjects.flatMap(p => p.subprojects);
 
     const amounts = [10, 25, 50, 100, 250, 500];
 
@@ -49,16 +63,29 @@ function FlipCard({ title, subtitle, backTitle, iconSrc, donateHref }: FlipCardP
                         <p className={styles.cardSubtitle}>{subtitle}</p>
                     </div>
                     <div className={styles.cardIconArea}>
-                        <img src={iconSrc} alt={title} className={styles.cardIcon} />
+                        <div className={styles.hexagon}></div>
                     </div>
                 </div>
 
                 {/* ===== Back Face ===== */}
                 <div
                     className={`${styles.cardFace} ${styles.cardBack}`}
-                    onClick={(e) => e.stopPropagation()}
                 >
                     <h3 className={styles.backTitle}>{backTitle}</h3>
+
+                    <div className={styles.dropdownWrapper} onClick={(e) => e.stopPropagation()}>
+                        <label className={styles.dropdownLabel}>Select a program</label>
+                        <select
+                            className={styles.dropdownSelect}
+                            value={selectedSubproject}
+                            onChange={(e) => setSelectedSubproject(e.target.value)}
+                        >
+                            <option value="">General Donation</option>
+                            {allSubprojects.map(sp => (
+                                <option key={sp.id} value={sp.id}>{sp.title}</option>
+                            ))}
+                        </select>
+                    </div>
 
                     <div className={styles.donateGrid}>
                         {amounts.map((amt) => (
@@ -136,16 +163,16 @@ export default function Hero() {
                         title="I want to make sustainable impact"
                         subtitle="Create sustainable, long-term impact that empowers communities to uplift themselves for generations"
                         backTitle="Sustainable Impact"
-                        iconSrc="/orphan_boy_1_v4.png"
                         donateHref="/donate"
+                        projectCategory="Sustainable"
                     />
 
                     <FlipCard
                         title="I want to solve emergency needs now"
                         subtitle="Deliver rapid, life-saving support that stabilises communities and restores hope in moments of crisis"
                         backTitle="Immediate Impact"
-                        iconSrc="/orphan_boy_2_v4.png"
                         donateHref="/donate"
+                        projectCategory="Emergency"
                     />
                 </div>
             </div>

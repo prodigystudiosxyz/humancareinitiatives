@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import styles from './ImpactStories.module.css';
 
@@ -34,6 +34,7 @@ const HexagonMotif = ({ className, strokeWidth = 1 }: { className?: string, stro
 interface Story {
     id: number;
     title: string;
+    image: string;
     content: React.ReactNode;
 }
 
@@ -41,6 +42,7 @@ const storiesData: Story[] = [
     {
         id: 1,
         title: 'Meet Sabina!',
+        image: '/orphan_boy_1.png',
         content: (
             <>
                 In 2015 she and her two children were struggling to make ends meet. <br /><br />
@@ -52,6 +54,7 @@ const storiesData: Story[] = [
     {
         id: 2,
         title: 'Meet Zaheer!',
+        image: '/orphan_boy_2.png',
         content: (
             <>
                 Zaheer lived in our supported orphanage home as a child, and we now fund him through university. <br /><br />
@@ -62,6 +65,7 @@ const storiesData: Story[] = [
     {
         id: 3,
         title: 'Meet Amina!',
+        image: '/orphan_program.JPG',
         content: (
             <>
                 Amina's village had no clean water for miles. Human Care installed a deep tube well right next to her cluster of homes. <br /><br />
@@ -73,18 +77,44 @@ const storiesData: Story[] = [
 
 export default function ImpactStories() {
     const [stories, setStories] = useState(storiesData);
+    const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
-    const handleDragEnd = (event: any, info: any) => {
-        // threshold to trigger wipe
-        if (Math.abs(info.offset.x) > 100) {
-            setStories((prev) => {
-                const newStories = [...prev];
-                const swiped = newStories.shift(); // Remove top card
-                if (swiped) newStories.push(swiped); // Move to bottom
-                return newStories;
-            });
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth <= 640);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
+
+    const handleDragEnd = (event: any, info: any, storyId: number) => {
+        const isExpanded = expandedId === storyId;
+
+        // threshold to trigger wipe or expand
+        if (Math.abs(info.offset.x) > 50) {
+            if (!isExpanded) {
+                setExpandedId(storyId);
+            } else {
+                setStories((prev) => {
+                    const newStories = [...prev];
+                    const swiped = newStories.shift(); // Remove top card
+                    if (swiped) newStories.push(swiped); // Move to bottom
+                    return newStories;
+                });
+                setExpandedId(null);
+            }
         }
     };
+
+    const MOBILE_WIDTH = 320;
+    const MOBILE_HEIGHT = 440;
+    const DESKTOP_WIDTH = 440;
+    const DESKTOP_HEIGHT = 560;
+
+    const expandedW = isMobile ? 320 : 780;
+    const expandedH = isMobile ? 640 : DESKTOP_HEIGHT;
+    const defaultW = isMobile ? MOBILE_WIDTH : DESKTOP_WIDTH;
+    const defaultH = isMobile ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
     return (
         <section className={styles.impactSection} id="impact-stories">
@@ -106,6 +136,8 @@ export default function ImpactStories() {
                         <AnimatePresence mode="popLayout">
                             {stories.map((story, index) => {
                                 const isTop = index === 0;
+                                const isExpanded = isTop && expandedId === story.id;
+                                const xOffset = isExpanded ? -(expandedW - defaultW) / 2 : index * 20;
 
                                 return (
                                     <motion.div
@@ -115,9 +147,11 @@ export default function ImpactStories() {
                                             zIndex: stories.length - index,
                                         }}
                                         animate={{
-                                            x: index * 20,
-                                            y: index * 15,
-                                            rotate: index * 2,
+                                            x: xOffset,
+                                            y: isExpanded && isMobile ? -(expandedH - defaultH) / 2 : index * 15,
+                                            width: isExpanded ? expandedW : defaultW,
+                                            height: isExpanded ? expandedH : defaultH,
+                                            rotate: isExpanded ? 0 : index * 2,
                                             scale: 1 - index * 0.05,
                                             opacity: 1 - index * 0.15,
                                         }}
@@ -128,7 +162,7 @@ export default function ImpactStories() {
                                         }}
                                         drag={isTop ? "x" : false}
                                         dragConstraints={{ left: 0, right: 0 }}
-                                        onDragEnd={handleDragEnd}
+                                        onDragEnd={(e, info) => handleDragEnd(e, info, story.id)}
                                         whileDrag={{ scale: 1.02 }}
                                         exit={{
                                             x: 500,
@@ -139,17 +173,43 @@ export default function ImpactStories() {
                                         }}
                                     >
                                         <div className={styles.cardDecoration} />
-                                        <h3 className={styles.storyTitle}>{story.title}</h3>
-                                        <div className={styles.storyText}>
-                                            {story.content}
-                                        </div>
 
-                                        {isTop && (
-                                            <div className={styles.clickHint}>
-                                                <span>Drag to explore more</span>
-                                                <ArrowRight size={18} />
+                                        <div
+                                            className={styles.cardInnerLayout}
+                                            style={{ flexDirection: isExpanded && isMobile ? 'column' : 'row' }}
+                                        >
+                                            <div
+                                                className={styles.cardTextSide}
+                                                style={{
+                                                    flex: isMobile && isExpanded ? '1 1 auto' : `0 0 ${defaultW - 80}px`,
+                                                }}
+                                            >
+                                                <h3 className={styles.storyTitle}>{story.title}</h3>
+                                                <div className={styles.storyText}>
+                                                    {story.content}
+                                                </div>
+
+                                                {isTop && (
+                                                    <div className={styles.clickHint}>
+                                                        <span>{isExpanded ? 'Drag again for next' : 'Drag to explore more'}</span>
+                                                        <ArrowRight size={18} />
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
+
+                                            <AnimatePresence>
+                                                {isExpanded && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, scale: 0.9, width: isMobile ? '100%' : 0 }}
+                                                        animate={{ opacity: 1, scale: 1, width: isMobile ? '100%' : '100%' }}
+                                                        exit={{ opacity: 0, scale: 0.9, width: isMobile ? '100%' : 0 }}
+                                                        className={styles.cardImageSide}
+                                                    >
+                                                        <img src={story.image} alt={story.title} className={styles.storyImage} />
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
                                     </motion.div>
                                 );
                             })}

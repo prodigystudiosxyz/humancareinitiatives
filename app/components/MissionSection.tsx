@@ -52,7 +52,7 @@ const MissionSection = () => {
                     <div className={styles.statItem}>
                         <div className={styles.statContent}>
                             <span className={styles.statValue}>150+</span>
-                            <span className={styles.statLabel}>ventures backed</span>
+                            <span className={styles.statLabel}>Projects Completed</span>
                         </div>
                         <div className={styles.statDivider} />
                     </div>
@@ -60,7 +60,7 @@ const MissionSection = () => {
                     <div className={styles.statItem}>
                         <div className={styles.statContent}>
                             <span className={styles.statValue}>$2M+</span>
-                            <span className={styles.statLabel}>contributed</span>
+                            <span className={styles.statLabel}>Contributed</span>
                         </div>
                         <div className={styles.statDivider} />
                     </div>
@@ -68,7 +68,7 @@ const MissionSection = () => {
                     <div className={styles.statItem}>
                         <div className={styles.statContent}>
                             <span className={styles.statValue}>3000+</span>
-                            <span className={styles.statLabel}>ventures pipelines</span>
+                            <span className={styles.statLabel}>Families Fed</span>
                         </div>
                     </div>
                 </div>
