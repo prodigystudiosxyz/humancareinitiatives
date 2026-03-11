@@ -1,86 +1,46 @@
 'use client';
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/utils/supabase/client';
 import styles from './ProjectsSection.module.css';
 
 interface Project {
     id: string;
     category: 'sustainable' | 'emergency';
-    name: string;
+    title: string;
     summary: string;
-    raised: string;
-    goal: string;
-    progress: number;
-    thumbnail: string;
+    description?: string;
+    thumbnail_url: string;
+    slug: string;
+    project_slug?: string;
 }
 
-const projects: Project[] = [
-    // Sustainable Projects
-    {
-        id: 'blind-girls-project',
-        category: 'sustainable',
-        name: 'Blind Girls Project',
-        summary: 'This program supports visually impaired girls by providing accommodation, education support, and rehabilitation services.',
-        raised: '£25,000',
-        goal: '£50,000',
-        progress: 50,
-        thumbnail: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-        id: 'livelihood-project',
-        category: 'sustainable',
-        name: 'Livelihood Project',
-        summary: 'This program provides income-generating assets such as sewing machines, rickshaws, and small business capital to help vulnerable families build sustainable livelihoods.',
-        raised: '£12,200',
-        goal: '£25,000',
-        progress: 48,
-        thumbnail: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-        id: 'orphan-care',
-        category: 'sustainable',
-        name: 'Orphan Care',
-        summary: 'This program supports orphan children by providing accommodation, food, education expenses, and essential care to ensure they can continue their studies in a safe and supportive environment.',
-        raised: '£5,600',
-        goal: '£10,000',
-        progress: 56,
-        thumbnail: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800'
-    },
-    // Emergency Projects
-    {
-        id: 'safe-water-access',
-        category: 'emergency',
-        name: 'Safe Water Access',
-        summary: 'This program installs deep tube wells to provide safe and clean drinking water to communities suffering from water scarcity or contaminated water sources.',
-        raised: '£85,000',
-        goal: '£100,000',
-        progress: 85,
-        thumbnail: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-        id: 'emergency-food-assistance',
-        category: 'emergency',
-        name: 'Emergency Food Assistance',
-        summary: 'This program provides emergency food assistance to families affected by floods, flash floods, and other natural disasters in Bangladesh.',
-        raised: '£7,400',
-        goal: '£15,000',
-        progress: 49,
-        thumbnail: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-        id: 'winter-relief',
-        category: 'emergency',
-        name: 'Winter Relief',
-        summary: 'This seasonal program distributes blankets, sweaters, jackets, and other winter clothing to vulnerable communities in cold-prone areas of Bangladesh, especially the elderly, children, and extremely poor households.',
-        raised: '£14,800',
-        goal: '£20,000',
-        progress: 74,
-        thumbnail: 'https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&q=80&w=800'
-    }
-];
-
 export default function ProjectsSection() {
+    const supabase = createClient();
     const [activeTab, setActiveTab] = useState<'sustainable' | 'emergency'>('sustainable');
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            setLoading(true);
+            const { data } = await supabase
+                .from('subprojects')
+                .select('id, category, title, summary, description, thumbnail_url, slug, projects(slug)')
+                .eq('is_landing_project', true)
+                .order('created_at', { ascending: false });
+
+            if (data) {
+                setProjects(data.map((s: any) => ({
+                    ...s,
+                    project_slug: s.projects?.slug
+                })));
+            }
+            setLoading(false);
+        };
+        fetchProjects();
+    }, []);
 
     const filteredProjects = projects.filter(p => p.category === activeTab);
 
@@ -106,46 +66,44 @@ export default function ProjectsSection() {
             </div>
 
             <div className={styles.projectsGrid}>
-                {filteredProjects.map((project) => (
-                    <div
-                        key={project.id}
-                        className={`${styles.projectCard} ${activeTab === 'sustainable' ? styles.sustainableCard : styles.emergencyCard}`}
-                    >
-                        {/* Thumbnail */}
-                        <div className={styles.thumbnailContainer}>
-                            <img
-                                src={project.thumbnail}
-                                alt={project.name}
-                                className={styles.thumbnail}
-                            />
-                        </div>
-
-                        {/* Content */}
-                        <div className={styles.contentArea}>
-                            <h3 className={styles.projectName}>{project.name}</h3>
-
-                            <div className={styles.raisedRow}>
-                                <span className={styles.raisedAmount}>{project.raised} <small style={{ fontWeight: 600, color: '#666', fontSize: '0.8rem' }}>raised</small></span>
-                                <span className={styles.goalAmount}>{project.goal} goal</span>
-                            </div>
-
-                            <div className={styles.progressBar}>
-                                <div
-                                    className={`${styles.progressFill} ${activeTab === 'sustainable' ? styles.fillSustainable : styles.fillEmergency}`}
-                                    style={{ width: `${project.progress}%` }}
+                {loading ? (
+                    <div className="flex justify-center p-20 col-span-full">
+                        <span className="text-gray-400">Loading projects...</span>
+                    </div>
+                ) : filteredProjects.length === 0 ? (
+                    <div className="flex justify-center p-20 col-span-full">
+                        <span className="text-gray-400">No {activeTab} projects found.</span>
+                    </div>
+                ) : (
+                    filteredProjects.map((project) => (
+                        <div
+                            key={project.id}
+                            className={`${styles.projectCard} ${activeTab === 'sustainable' ? styles.sustainableCard : styles.emergencyCard}`}
+                        >
+                            <div className={styles.thumbnailContainer}>
+                                <img
+                                    src={project.thumbnail_url || "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&q=80&w=800"}
+                                    alt={project.title}
+                                    className={styles.thumbnail}
                                 />
                             </div>
 
-                            <p className={styles.projectSummary}>{project.summary}</p>
+                            <div className={styles.contentArea}>
+                                <h3 className={styles.projectName}>{project.title}</h3>
 
-                            <div className={styles.donateAction}>
-                                <Link href={`/appeals/${project.id}`} className={styles.donateNowBtn}>
-                                    Donate Now
-                                </Link>
+                                <p className={styles.projectSummary}>
+                                    {project.summary}
+                                </p>
+
+                                <div className={styles.donateAction}>
+                                    <Link href={`/our-projects/${project.project_slug}/${project.slug}`} className={styles.donateNowBtn}>
+                                        Donate Now
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             <div className={styles.viewAllContainer}>

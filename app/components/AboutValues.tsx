@@ -3,27 +3,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, HandHeart, RefreshCcw } from 'lucide-react';
+import { useAdminData } from '../admin/AdminDataContext';
 import styles from './AboutValues.module.css';
 
-const valuesData = [
-    {
-        title: 'Care',
-        description: 'We try to look and act beyond the material and metrics. We try our best to listen to our brothers and sisters, and attempt to walk in their shoes, not for marketing, but to design better programmes and processes so your pound goes further.',
-        icon: <Heart size={28} />
-    },
-    {
-        title: 'Dignity',
-        description: "We don't give, we serve. We don't put aid in people's hands, they take it from us. Our hands are never raised above theirs, and their hands are never outstretched beneath ours.",
-        icon: <HandHeart size={28} />
-    },
-    {
-        title: 'Sustainable',
-        description: 'A cornerstone of our approach is not just giving a handout but also a strong hand up. Communities should be given the tools to stand on their own two feet without us or you.',
-        icon: <RefreshCcw size={28} />
-    },
-];
+const iconMap: Record<string, React.ReactNode> = {
+    'Heart': <Heart size={28} />,
+    'HandHeart': <HandHeart size={28} />,
+    'RefreshCcw': <RefreshCcw size={28} />,
+};
 
 const AboutValues = () => {
+    const { aboutValues } = useAdminData();
+
     const containerVariants: any = {
         hidden: { opacity: 0 },
         visible: {
@@ -47,7 +38,7 @@ const AboutValues = () => {
         <section className={styles.section}>
             <div className={styles.container}>
                 <motion.h2 className={styles.title} variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                    Our Values
+                    {aboutValues.title}
                 </motion.h2>
 
                 <motion.div
@@ -57,10 +48,10 @@ const AboutValues = () => {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                 >
-                    {valuesData.map((item, index) => (
+                    {aboutValues.items.map((item, index) => (
                         <motion.div key={index} className={styles.card} variants={itemVariants}>
                             <div className={styles.iconWrapper}>
-                                {item.icon}
+                                {iconMap[item.icon] || <Heart size={28} />}
                             </div>
                             <h3 className={styles.cardTitle}>{item.title}</h3>
                             <p className={styles.description}>{item.description}</p>

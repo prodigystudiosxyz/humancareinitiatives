@@ -1,160 +1,93 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Play } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 import styles from './ImpactGalleryPage.module.css';
 
 type GalleryItem = {
-  id: number;
+  id: string;
   title: string;
-  year: number;
-  category: string;
-  image: string;
-  tone: 'maroon' | 'green' | 'purple' | 'blue';
-  type: 'image' | 'video';
+  video_url: string;
+  thumbnail_url: string;
+  description?: string;
+  tags?: string[];
+  created_at: string;
 };
 
-const categoryOrder = [
-  'All',
-  'Food',
-  'Water',
-  'Health',
-  'Education',
-  'Livelihood',
-  'Mothers',
-  'Children',
-];
+// Media Type categories
+const mediaCategories = ['All', 'Videos', 'Images'];
 
-const galleryItems: GalleryItem[] = [
-  {
-    id: 1,
-    title: 'CashBack Hubs',
-    year: 2025,
-    category: 'Livelihood',
-    image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=900&q=80',
-    tone: 'maroon',
-    type: 'video',
-  },
-  {
-    id: 2,
-    title: 'Creative Connections',
-    year: 2025,
-    category: 'Education',
-    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-    tone: 'green',
-    type: 'image',
-  },
-  {
-    id: 3,
-    title: 'Make Space',
-    year: 2024,
-    category: 'Children',
-    image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
-    tone: 'blue',
-    type: 'video',
-  },
-  {
-    id: 4,
-    title: 'Water Access Point',
-    year: 2024,
-    category: 'Water',
-    image: 'https://images.unsplash.com/photo-1459183885421-5cc683b8dbba?auto=format&fit=crop&w=900&q=80',
-    tone: 'purple',
-    type: 'image',
-  },
-  {
-    id: 5,
-    title: 'Mothers Nutrition Circle',
-    year: 2023,
-    category: 'Mothers',
-    image: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80',
-    tone: 'maroon',
-    type: 'video',
-  },
-  {
-    id: 6,
-    title: 'Health Camp Day',
-    year: 2023,
-    category: 'Health',
-    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=900&q=80',
-    tone: 'green',
-    type: 'image',
-  },
-  {
-    id: 7,
-    title: 'Community Food Pack',
-    year: 2025,
-    category: 'Food',
-    image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80',
-    tone: 'blue',
-    type: 'video',
-  },
-  {
-    id: 8,
-    title: 'Learning Hour',
-    year: 2024,
-    category: 'Children',
-    image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80',
-    tone: 'purple',
-    type: 'image',
-  },
-];
-
-type MediaFilterType = 'All' | 'Images' | 'Videos';
+// Helper to check if a URL is a video
+const isVideoMedia = (url: string) => url.includes('youtube') || url.includes('youtu.be') || url.includes('vimeo');
 
 export default function ImpactGalleryPage() {
+  const supabase = createClient();
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [categories, setCategories] = useState<string[]>(['All']);
+  const [loading, setLoading] = useState(true);
   const [yearFilter, setYearFilter] = useState('All Years');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [mediaFilter, setMediaFilter] = useState<MediaFilterType>('All');
+  const [mediaTypeFilter, setMediaTypeFilter] = useState('All');
 
-  const years = useMemo(
-    () => ['All Years', ...Array.from(new Set(galleryItems.map((item) => item.year))).sort((a, b) => b - a)],
-    [],
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const galleryPromise = supabase
+        .from('impact_gallery')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      const settingsPromise = supabase
+        .from('site_settings')
+        .select('value')
+        .eq('id', 'gallery_tags')
+        .single();
+
+      const [galleryRes, settingsRes] = await Promise.all([galleryPromise, settingsPromise]);
+
+      if (galleryRes.data) setGalleryItems(galleryRes.data);
+      if (settingsRes.data?.value) {
+        setCategories(['All', ...(settingsRes.data.value as string[])]);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const years = useMemo(() => {
+    const yearsSet = new Set(galleryItems.map(item => new Date(item.created_at).getFullYear()));
+    return ['All Years', ...Array.from(yearsSet).sort((a, b) => b - a)];
+  }, [galleryItems]);
 
   const filteredItems = useMemo(() => {
     return galleryItems.filter((item) => {
-      const yearMatch = yearFilter === 'All Years' || item.year === Number(yearFilter);
-      const categoryMatch = categoryFilter === 'All' || item.category === categoryFilter;
+      const yearMatch = yearFilter === 'All Years' || new Date(item.created_at).getFullYear() === Number(yearFilter);
 
-      let mediaMatch = true;
-      if (mediaFilter === 'Images') mediaMatch = item.type === 'image';
-      if (mediaFilter === 'Videos') mediaMatch = item.type === 'video';
+      const isVideo = isVideoMedia(item.video_url);
+      const mediaMatch =
+        mediaTypeFilter === 'All' ||
+        (mediaTypeFilter === 'Videos' && isVideo) ||
+        (mediaTypeFilter === 'Images' && !isVideo);
 
-      return yearMatch && categoryMatch && mediaMatch;
+      const categoryMatch =
+        categoryFilter === 'All' ||
+        (item.tags && item.tags.includes(categoryFilter));
+
+      return yearMatch && mediaMatch && categoryMatch;
     });
-  }, [yearFilter, categoryFilter, mediaFilter]);
+  }, [galleryItems, yearFilter, categoryFilter, mediaTypeFilter]);
+
+  const getTone = (id: string) => {
+    const tones: ('maroon' | 'green' | 'purple' | 'blue')[] = ['maroon', 'green', 'purple', 'blue'];
+    const index = id.charCodeAt(0) % tones.length;
+    return tones[index];
+  };
 
   return (
     <section className={styles.page}>
       <div className={styles.headerBlock}>
         <h1>Impact Gallery</h1>
-      </div>
-
-      <div className={styles.mediaToggleRow}>
-        <div className={styles.toggleGroup}>
-          <button
-            type="button"
-            className={(mediaFilter === 'All' ? styles.toggleActive : styles.toggleBtn)}
-            onClick={() => setMediaFilter('All')}
-          >
-            All
-          </button>
-          <button
-            type="button"
-            className={(mediaFilter === 'Images' ? styles.toggleActive : styles.toggleBtn)}
-            onClick={() => setMediaFilter('Images')}
-          >
-            Images
-          </button>
-          <button
-            type="button"
-            className={(mediaFilter === 'Videos' ? styles.toggleActive : styles.toggleBtn)}
-            onClick={() => setMediaFilter('Videos')}
-          >
-            Videos
-          </button>
-        </div>
       </div>
 
       <div className={styles.filterRow}>
@@ -164,16 +97,16 @@ export default function ImpactGalleryPage() {
           value={yearFilter}
           onChange={(event) => setYearFilter(event.target.value)}
         >
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
+          {years.map((y) => (
+            <option key={y} value={y}>
+              {y}
             </option>
           ))}
         </select>
       </div>
 
       <div className={styles.categoryStrip}>
-        {categoryOrder.map((category) => (
+        {categories.map((category) => (
           <button
             key={category}
             type="button"
@@ -185,20 +118,50 @@ export default function ImpactGalleryPage() {
         ))}
       </div>
 
-      <div className={styles.grid}>
-        {filteredItems.map((item) => (
-          <article className={styles.card} key={item.id}>
-            <div className={`${styles.imageShell} ${styles[item.tone]}`}>
-              <img src={item.image} alt={item.title} className={styles.image} />
-              {item.type === 'video' && (
-                <div className={styles.playOverlay}>
-                  <Play fill="white" size={36} color="white" />
-                </div>
-              )}
-            </div>
-            <h2>{item.title}</h2>
-          </article>
+      <div className={styles.categoryStrip} style={{ marginTop: '0.5rem', marginBottom: '2rem' }}>
+        {mediaCategories.map((type) => (
+          <button
+            key={type}
+            type="button"
+            className={mediaTypeFilter === type ? styles.categoryActive : styles.categoryButton}
+            onClick={() => setMediaTypeFilter(type)}
+            style={{ padding: '0.4rem 1.2rem', fontSize: '0.9rem', borderRadius: '20px' }}
+          >
+            {type}
+          </button>
         ))}
+      </div>
+
+      <div className={styles.grid}>
+        {loading ? (
+          <div className="col-span-full py-20 text-center text-gray-400">Loading gallery...</div>
+        ) : filteredItems.length === 0 ? (
+          <div className="col-span-full py-20 text-center text-gray-400">No items found.</div>
+        ) : (
+          filteredItems.map((item) => {
+            const isVideo = isVideoMedia(item.video_url);
+            return (
+              <article className={styles.card} key={item.id}>
+                <a href={item.video_url} target="_blank" rel="noopener noreferrer">
+                  <div className={`${styles.imageShell} ${styles[getTone(item.id)]}`}>
+                    <img
+                      src={isVideo ? (item.thumbnail_url || "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=900&q=80") : item.video_url}
+                      alt={item.title}
+                      className={styles.image}
+                      style={{ objectFit: 'cover' }}
+                    />
+                    {isVideo && (
+                      <div className={styles.playOverlay}>
+                        <Play fill="white" size={36} color="white" />
+                      </div>
+                    )}
+                  </div>
+                  <h2>{item.title}</h2>
+                </a>
+              </article>
+            );
+          })
+        )}
       </div>
     </section>
   );

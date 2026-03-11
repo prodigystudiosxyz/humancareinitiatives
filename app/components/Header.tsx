@@ -5,12 +5,34 @@ import { usePathname } from 'next/navigation';
 import { ChevronDown, User, Heart, Menu, X } from 'lucide-react';
 import styles from './Header.module.css';
 
+import { createClient } from '@/utils/supabase/client';
+
 export default function Header() {
+    const supabase = createClient();
     const pathname = usePathname();
     const isHome = pathname === '/';
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<'impact' | 'projects' | null>(null);
+    const [navProjects, setNavProjects] = useState<{ title: string, slug: string, project_slug: string }[]>([]);
+
+    useEffect(() => {
+        const fetchNavProjects = async () => {
+            const { data } = await supabase
+                .from('subprojects')
+                .select('title, slug, projects(slug)')
+                .eq('is_navbar_project', true)
+                .order('title');
+            if (data) {
+                setNavProjects(data.map((s: any) => ({
+                    title: s.title,
+                    slug: s.slug,
+                    project_slug: s.projects?.slug || ''
+                })));
+            }
+        };
+        fetchNavProjects();
+    }, []);
 
     useEffect(() => {
         if (!isHome) return;
@@ -101,17 +123,24 @@ export default function Header() {
                     </button>
                     <div className={styles.dropdownMenu}>
                         <Link href="/our-projects" className={styles.dropdownLink} onClick={closeMobileMenu}>All Projects</Link>
-                        <Link href="/our-projects/humanitarian-emergency-response" className={styles.dropdownLink} onClick={closeMobileMenu}>Emergency Response</Link>
-                        <Link href="/our-projects/education-support-child-development" className={styles.dropdownLink} onClick={closeMobileMenu}>Education Support</Link>
-                        <Link href="/our-projects/wash-program" className={styles.dropdownLink} onClick={closeMobileMenu}>WASH Program</Link>
+                        {navProjects.map(proj => (
+                            <Link
+                                key={proj.slug}
+                                href={`/our-projects/${proj.project_slug}/${proj.slug}`}
+                                className={styles.dropdownLink}
+                                onClick={closeMobileMenu}
+                            >
+                                {proj.title}
+                            </Link>
+                        ))}
                     </div>
                 </div>
 
                 <div className={styles.mobileActions}>
-                    <Link href="/donate" className="btn-accent-maroon" onClick={closeMobileMenu}>
+                    <Link href="/donate?campaign=zakat" className="btn-accent-maroon" onClick={closeMobileMenu}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Zakat
                     </Link>
-                    <Link href="/donate" className="btn-accent-green" onClick={closeMobileMenu}>
+                    <Link href="/donate?campaign=sadaqah" className="btn-accent-green" onClick={closeMobileMenu}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Sadaqah
                     </Link>
                     <Link href="/account" className={styles.mobileAccountLink} onClick={closeMobileMenu}>
@@ -122,10 +151,10 @@ export default function Header() {
 
             <div className={styles.actions}>
                 <div className={styles.donateButtons}>
-                    <Link href="/donate" className="btn-accent-maroon" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+                    <Link href="/donate?campaign=zakat" className="btn-accent-maroon" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Zakat
                     </Link>
-                    <Link href="/donate" className="btn-accent-green" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+                    <Link href="/donate?campaign=sadaqah" className="btn-accent-green" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                         <Heart size={16} style={{ marginRight: '0.3rem' }} /> Donate Sadaqah
                     </Link>
                 </div>

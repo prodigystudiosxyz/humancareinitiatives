@@ -6,8 +6,9 @@ export default function ImpactStats() {
     const stats = [
         { value: '£10m+', label: 'Funds Deployed' },
         { value: '1m+', label: 'People Impacted' },
-        { value: '15+', label: 'Years Running' },
-        { value: '50+', label: 'Projects Implemented' }
+        { value: '15 Years', label: 'Running' },
+        { value: '50+', label: 'Projects Implemented' },
+        { value: '1k+', label: 'Volunteers' }
     ];
 
     return (

@@ -1,43 +1,75 @@
 export type Project = {
-  id: number;
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+};
+
+export type Subproject = {
+  id: string;
+  project_id: string;
   title: string;
-  category: string;
-  goal: string;
+  slug: string;
+  summary: string;
+  description: string;
+  thumbnail_url: string;
+  category: 'sustainable' | 'emergency';
+  raised: number;
+  goal: number;
+  progress: number;
+  is_featured_campaign: boolean;
+  is_landing_project: boolean;
+  is_navbar_project: boolean;
+  custom_tagline?: string;
+  short_description?: string;
+  locations?: string[];
 };
 
 export type Appeal = {
-  id: number;
+  id: string;
   title: string;
-  project: string;
-  target: string;
+  slug: string;
+  description: string;
+  image_url: string;
+  is_urgent: boolean;
+  raised: number;
+  goal: number;
 };
 
 export type GalleryItem = {
-  id: number;
+  id: string;
   title: string;
-  year: string;
-  category: string;
+  video_url: string;
+  thumbnail_url: string;
+  tags?: string[];
+  created_at?: string;
 };
 
 export type StoryItem = {
-  id: number;
+  id: string;
   title: string;
-  summary: string;
+  content: string;
+  image_url: string;
+  display_order: number;
 };
 
 export type ReportItem = {
-  id: number;
+  id: string;
   title: string;
-  fileName: string;
+  file_url: string;
+  year: number;
 };
 
 export type ArticleItem = {
-  id: number;
+  id: string;
   title: string;
-  excerpt: string;
-  status: 'Draft' | 'Published';
+  slug: string;
+  content: string;
+  thumbnail_url: string;
+  published_at: string;
 };
 
+// Existing types we want to keep
 export type FeaturedAppeals = {
   first: number;
   second: number;
@@ -49,4 +81,25 @@ export type HeroConfig = {
   backgroundImage: string;
   ctaText: string;
   ctaLink: string;
+};
+
+export type VolunteerApplication = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  interest: string;
+  availability: string;
+  status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
+  created_at: string;
+};
+
+export type ContactMessage = {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: 'unread' | 'read' | 'replied';
+  created_at: string;
 };

@@ -1,8 +1,10 @@
 .statsSection {
-    background-color: #000000;
+    background-color: var(--accent-green);
     color: #ffffff;
-    padding: 120px 5%;
+    padding: 80px 5%;
     width: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .statsInner {
@@ -32,7 +34,7 @@
     display: block;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #888;
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }

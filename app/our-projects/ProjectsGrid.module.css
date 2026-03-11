@@ -43,11 +43,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 8px;
-    /* Slight rounded corners, or 0 for sharp edges matching the image */
+    border-radius: 20px;
+    /* Soft rounded corners matching the subprojects/rest of the site */
     color: white;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .cardFront {

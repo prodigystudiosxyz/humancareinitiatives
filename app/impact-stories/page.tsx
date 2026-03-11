@@ -45,7 +45,6 @@ export default function ImpactStoriesPage() {
     <section className={styles.page}>
       <div className={styles.headerBlock}>
         <h1>Impact Stories</h1>
-        <p>Hover for title. Click to read.</p>
       </div>
 
       <div className={styles.grid}>
@@ -64,6 +63,7 @@ export default function ImpactStoriesPage() {
                 <article className={styles.cardFront}>
                   <img src={story.image} alt={story.title} className={styles.cardImage} />
                   <div className={styles.hoverTitle}>{story.title}</div>
+                  <div className={styles.viewStoryTag}>View Story</div>
                 </article>
 
                 <article className={styles.cardBack}>

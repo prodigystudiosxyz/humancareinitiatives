@@ -1,14 +1,21 @@
 'use client';
 import React from 'react';
+import { useAdminData } from '../admin/AdminDataContext';
 import styles from './Newsletter.module.css';
 
 export default function Newsletter() {
+    const { newsletterConfig } = useAdminData();
+
     return (
         <section className={styles.newsletterSection}>
             <div className={styles.newsletterInner}>
                 <h2 className={styles.headline}>
-                    What's quietly transforming <br />
-                    communities in Bangladesh?
+                    {newsletterConfig.headline.split('\\n').map((line, i) => (
+                        <React.Fragment key={i}>
+                            {line}
+                            {i < newsletterConfig.headline.split('\\n').length - 1 && <br />}
+                        </React.Fragment>
+                    ))}
                 </h2>
                 <div className={styles.formArea}>
                     <input
@@ -21,7 +28,7 @@ export default function Newsletter() {
                     </button>
                 </div>
                 <p className={styles.privacy}>
-                    Stay updated with real stories of impact. No spam
+                    {newsletterConfig.privacy_text}
                 </p>
             </div>
         </section>

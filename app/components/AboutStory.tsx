@@ -2,9 +2,12 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAdminData } from '../admin/AdminDataContext';
 import styles from './AboutStory.module.css';
 
 const AboutStory = () => {
+    const { aboutStory } = useAdminData();
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -22,6 +25,12 @@ const AboutStory = () => {
             y: 0,
             transition: { duration: 0.8 },
         },
+    };
+
+    const formatText = (text: string) => {
+        if (!text) return [];
+        // Handle both actual newlines and literal \n characters from DB
+        return text.split(/\\n|\n/);
     };
 
     return (
@@ -60,38 +69,23 @@ const AboutStory = () => {
             >
                 <div className={styles.intro}>
                     <motion.h1 className={styles.introHeadline} variants={itemVariants}>
-                        Human Care was inspired by a mother in Bangladesh who would quietly feed those who came to her door even when she herself went to bed hungry.
+                        {aboutStory.headline.replace(/\\n/g, '\n')}
                     </motion.h1>
                 </div>
 
                 <div className={styles.storyContent}>
-                    <motion.h2 className={styles.storyTitle} variants={itemVariants}>HCI Story</motion.h2>
+                    <motion.h2 className={styles.storyTitle} variants={itemVariants}>{aboutStory.title}</motion.h2>
 
                     <motion.div className={styles.column} variants={itemVariants}>
-                        <p>
-                            From that simple but profound act grew a mission of care. But as a few friends noticed, care wasn’t enough.
-                            Organisations desperate to help, would fly in, fly out, year after year, but the problems seemed to keep getting bigger rather than smaller.
-                        </p>
-                        <p>
-                            On closer inspection, often, behind the impact numbers and reports: the most in need and vulnerable were left forgotten, only the strongest made their way to the front of the line to access help.
-                        </p>
-                        <p>
-                            Something needed to be improved.
-                            The most vulnerable could not simply wait to be found, they had to be sought out. And they needed more than a temporary bandage.
-                        </p>
+                        {formatText(aboutStory.content_left).map((para, i) => (
+                            para.trim() ? <p key={i}>{para}</p> : <br key={i} />
+                        ))}
                     </motion.div>
 
                     <motion.div className={styles.column} variants={itemVariants}>
-                        <p>
-                            Human Care was a humble attempt at that answer.
-                        </p>
-                        <p>
-                            With a dedicated focus on Bangladesh, we committed to building expertise in sustainable, strategic impact.
-                            Through a trusted local network of hundreds of volunteers across every district, we identify and prioritise those most in need, ensuring help reaches the forgotten first.
-                        </p>
-                        <p>
-                            That mission to care for the most vulnerable continues today, so we can work to a future where we don't need to exist tomorrow.
-                        </p>
+                        {formatText(aboutStory.content_right).map((para, i) => (
+                            para.trim() ? <p key={i}>{para}</p> : <br key={i} />
+                        ))}
                     </motion.div>
                 </div>
             </motion.div>

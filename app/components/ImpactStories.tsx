@@ -1,7 +1,9 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 import styles from './ImpactStories.module.css';
 
 const HexagonMotif = ({ className, strokeWidth = 1 }: { className?: string, strokeWidth?: number }) => (
@@ -12,13 +14,12 @@ const HexagonMotif = ({ className, strokeWidth = 1 }: { className?: string, stro
         stroke="currentColor"
         strokeWidth={strokeWidth}
     >
-        {/* Mathematically defined 6-hexagon ring */}
         {[0, 60, 120, 180, 240, 300].map((angle, i) => {
             const rad = (angle * Math.PI) / 180;
             const dist = 22;
             const cx = 50 + Math.cos(rad) * dist;
             const cy = 50 + Math.sin(rad) * dist;
-            const r = 18; // radius of each hexagon
+            const r = 18;
 
             const points = [];
             for (let j = 0; j < 6; j++) {
@@ -32,73 +33,49 @@ const HexagonMotif = ({ className, strokeWidth = 1 }: { className?: string, stro
 );
 
 interface Story {
-    id: number;
+    id: string;
     title: string;
-    image: string;
-    content: React.ReactNode;
+    image_url: string;
+    content: string;
 }
 
-const storiesData: Story[] = [
-    {
-        id: 1,
-        title: 'Meet Sabina!',
-        image: '/orphan_boy_1.png',
-        content: (
-            <>
-                In 2015 she and her two children were struggling to make ends meet. <br /><br />
-                Human Care gave her a cow. Selling the offspring and produce at the local market, she was able to purchase a piece of farming land and a fish farm. <br /><br />
-                She and her family are now only Allah dependent!
-            </>
-        )
-    },
-    {
-        id: 2,
-        title: 'Meet Zaheer!',
-        image: '/orphan_boy_2.png',
-        content: (
-            <>
-                Zaheer lived in our supported orphanage home as a child, and we now fund him through university. <br /><br />
-                We follow through with our orphans and help them achieve their childhood dreams!
-            </>
-        )
-    },
-    {
-        id: 3,
-        title: 'Meet Amina!',
-        image: '/orphan_program.JPG',
-        content: (
-            <>
-                Amina's village had no clean water for miles. Human Care installed a deep tube well right next to her cluster of homes. <br /><br />
-                Now she and 40 other families have instant access to safe, clean water every single day.
-            </>
-        )
-    }
-];
-
 export default function ImpactStories() {
-    const [stories, setStories] = useState(storiesData);
-    const [expandedId, setExpandedId] = useState<number | null>(null);
+    const supabase = createClient();
+    const [stories, setStories] = useState<Story[]>([]);
+    const [expandedId, setExpandedId] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 640);
         check();
         window.addEventListener('resize', check);
+        fetchStories();
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    const handleDragEnd = (event: any, info: any, storyId: number) => {
+    const fetchStories = async () => {
+        setLoading(true);
+        const { data } = await supabase
+            .from('impact_stories')
+            .select('*')
+            .order('display_order', { ascending: true });
+
+        if (data) setStories(data);
+        setLoading(false);
+    };
+
+    const handleDragEnd = (event: any, info: any, storyId: string) => {
         const isExpanded = expandedId === storyId;
 
-        // threshold to trigger wipe or expand
         if (Math.abs(info.offset.x) > 50) {
             if (!isExpanded) {
                 setExpandedId(storyId);
             } else {
                 setStories((prev) => {
                     const newStories = [...prev];
-                    const swiped = newStories.shift(); // Remove top card
-                    if (swiped) newStories.push(swiped); // Move to bottom
+                    const swiped = newStories.shift();
+                    if (swiped) newStories.push(swiped);
                     return newStories;
                 });
                 setExpandedId(null);
@@ -116,10 +93,12 @@ export default function ImpactStories() {
     const defaultW = isMobile ? MOBILE_WIDTH : DESKTOP_WIDTH;
     const defaultH = isMobile ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
+    if (loading) return null;
+    if (stories.length === 0) return null;
+
     return (
         <section className={styles.impactSection} id="impact-stories">
             <div className={styles.impactInner}>
-                {/* Left - Headline */}
                 <div className={styles.headlineArea}>
                     <h2 className={styles.headline}>
                         why we do <br />
@@ -130,7 +109,6 @@ export default function ImpactStories() {
                     </div>
                 </div>
 
-                {/* Right - Draggable Card Deck */}
                 <div className={styles.cardArea}>
                     <div className={styles.cardStack}>
                         <AnimatePresence mode="popLayout">
@@ -185,9 +163,10 @@ export default function ImpactStories() {
                                                 }}
                                             >
                                                 <h3 className={styles.storyTitle}>{story.title}</h3>
-                                                <div className={styles.storyText}>
-                                                    {story.content}
-                                                </div>
+                                                <div
+                                                    className={styles.storyText}
+                                                    dangerouslySetInnerHTML={{ __html: story.content }}
+                                                />
 
                                                 {isTop && (
                                                     <div className={styles.clickHint}>
@@ -205,7 +184,7 @@ export default function ImpactStories() {
                                                         exit={{ opacity: 0, scale: 0.9, width: isMobile ? '100%' : 0 }}
                                                         className={styles.cardImageSide}
                                                     >
-                                                        <img src={story.image} alt={story.title} className={styles.storyImage} />
+                                                        <img src={story.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"} alt={story.title} className={styles.storyImage} />
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>

@@ -41,7 +41,7 @@
     position: absolute;
     left: -300px;
     /* Exactly half of the 600px width is off-page */
-    top: 50%;
+    top: 70%;
     transform: translateY(-50%);
     width: 600px;
     height: 600px;

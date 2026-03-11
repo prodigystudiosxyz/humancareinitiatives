@@ -2,12 +2,13 @@
    Our Projects Section
    =========================== */
 .projectsSection {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #1a1a1a;
     padding: 100px 5%;
     width: 100%;
     position: relative;
     overflow: hidden;
+    border-top: 1px solid #e5e7eb;
 }
 
 .sectionHeader {
@@ -20,7 +21,7 @@
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: 30px;
-    color: #ffffff;
+    color: #1a1a1a;
 }
 
 /* ===========================
@@ -37,7 +38,7 @@
 .tabBtn {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(0, 0, 0, 0.45);
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
@@ -50,7 +51,7 @@
 }
 
 .tabBtn:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .tabBtn::after {
@@ -112,7 +113,7 @@
 
 .projectCard:hover {
     transform: translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .thumbnailContainer {
@@ -214,23 +215,23 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: #f8f8f8;
-    color: #333;
-}
-
-.donateNowBtn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.sustainableCard:hover .donateNowBtn {
     background-color: #22b566;
     color: #ffffff;
 }
 
-.emergencyCard:hover .donateNowBtn {
+.donateNowBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(34, 181, 102, 0.2);
+    background-color: #1fae5d;
+}
+
+.emergencyCard .donateNowBtn {
     background-color: #f42a41;
-    color: #ffffff;
+}
+
+.emergencyCard .donateNowBtn:hover {
+    background-color: #e0253b;
+    box-shadow: 0 10px 20px rgba(244, 42, 65, 0.2);
 }
 
 /* ===========================
@@ -248,11 +249,11 @@
     gap: 10px;
     padding: 12px 28px;
     background: transparent;
-    color: #ffffff;
+    color: #1a1a1a;
     font-size: 1.1rem;
     font-weight: 600;
     text-decoration: none;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 100px;
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -260,8 +261,8 @@
 }
 
 .viewAllBtn:hover {
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    border-color: #1a1a1a;
+    background: rgba(0, 0, 0, 0.02);
     transform: translateY(-2px);
 }
 

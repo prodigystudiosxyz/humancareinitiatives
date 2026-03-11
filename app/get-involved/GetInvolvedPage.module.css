@@ -1,6 +1,6 @@
 .page {
-  padding: 6.25rem 2rem 4.5rem;
-  max-width: 1120px;
+  padding: 8rem 2rem 6rem;
+  max-width: 800px;
   margin: 0 auto;
   width: 100%;
 }
@@ -19,20 +19,21 @@
 
 .headerBlock p {
   color: #475569;
-  font-size: 1rem;
+  font-size: 1.125rem;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+.container {
+  display: flex;
+  justify-content: center;
 }
 
 .formCard {
   border: 1px solid #e2e8f0;
   background: #ffffff;
-  border-radius: 14px;
-  padding: 1rem;
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .formCard h2 {
@@ -87,6 +88,49 @@
 
 .primaryBtn:hover {
   background: var(--accent-green-light);
+}
+
+.successMsg {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #f0fdf4;
+  color: #166534;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid #bbf7d0;
+}
+
+.errorMsg {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #fef2f2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid #fecaca;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 720px) {

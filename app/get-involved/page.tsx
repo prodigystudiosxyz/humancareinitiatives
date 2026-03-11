@@ -1,36 +1,88 @@
+'use client';
+
+import { useState, FormEvent } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import styles from './GetInvolvedPage.module.css';
 
 export default function GetInvolvedPage() {
+  const supabase = createClient();
+
+  // Volunteer Form State
+  const [volLoading, setVolLoading] = useState(false);
+  const [volSuccess, setVolSuccess] = useState(false);
+  const [volError, setVolError] = useState('');
+
+  const handleVolunteerSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setVolLoading(true);
+    setVolError('');
+    setVolSuccess(false);
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      full_name: formData.get('volunteerName'),
+      email: formData.get('volunteerEmail'),
+      phone: formData.get('volunteerPhone'),
+      interest: formData.get('volunteerInterest'),
+      availability: formData.get('volunteerAvailability'),
+    };
+
+    const { error } = await supabase.from('volunteer_applications').insert([data]);
+
+    if (error) {
+      setVolError(error.message);
+    } else {
+      setVolSuccess(true);
+      (e.target as HTMLFormElement).reset();
+    }
+    setVolLoading(false);
+  };
+
   return (
     <section className={styles.page}>
       <div className={styles.headerBlock}>
-        <h1>Get Involved</h1>
-        <p>Volunteer with us or send a message.</p>
+        <h1>Become a Volunteer</h1>
+        <p>Join our network of hundreds of volunteers across Bangladesh.</p>
       </div>
 
-      <div className={styles.grid}>
+      <div className={styles.container}>
         <article className={styles.formCard}>
           <h2>Volunteer Signup</h2>
 
-          <form className={styles.form}>
+          {volSuccess && (
+            <div className={styles.successMsg}>
+              <CheckCircle2 size={20} />
+              <span>Application submitted successfully!</span>
+            </div>
+          )}
+
+          {volError && (
+            <div className={styles.errorMsg}>
+              <AlertCircle size={20} />
+              <span>{volError}</span>
+            </div>
+          )}
+
+          <form className={styles.form} onSubmit={handleVolunteerSubmit}>
             <label>
               Full Name
-              <input type="text" name="volunteerName" placeholder="Your full name" />
+              <input type="text" name="volunteerName" placeholder="Your full name" required />
             </label>
 
             <label>
               Email
-              <input type="email" name="volunteerEmail" placeholder="you@example.com" />
+              <input type="email" name="volunteerEmail" placeholder="you@example.com" required />
             </label>
 
             <label>
               Phone
-              <input type="tel" name="volunteerPhone" placeholder="+880..." />
+              <input type="tel" name="volunteerPhone" placeholder="+880..." required />
             </label>
 
             <label>
               Area of Interest
-              <select name="volunteerInterest" defaultValue="">
+              <select name="volunteerInterest" defaultValue="" required>
                 <option value="" disabled>
                   Select an area
                 </option>
@@ -43,41 +95,11 @@ export default function GetInvolvedPage() {
 
             <label>
               Availability
-              <input type="text" name="volunteerAvailability" placeholder="Weekends / Evenings" />
+              <input type="text" name="volunteerAvailability" placeholder="Weekends / Evenings" required />
             </label>
 
-            <button type="submit" className={styles.primaryBtn}>
-              Submit
-            </button>
-          </form>
-        </article>
-
-        <article className={styles.formCard}>
-          <h2>Contact Form</h2>
-
-          <form className={styles.form}>
-            <label>
-              Name
-              <input type="text" name="contactName" placeholder="Your name" />
-            </label>
-
-            <label>
-              Email
-              <input type="email" name="contactEmail" placeholder="you@example.com" />
-            </label>
-
-            <label>
-              Subject
-              <input type="text" name="contactSubject" placeholder="How can we help?" />
-            </label>
-
-            <label>
-              Message
-              <textarea name="contactMessage" placeholder="Write your message" rows={5}></textarea>
-            </label>
-
-            <button type="submit" className={styles.primaryBtn}>
-              Send Message
+            <button type="submit" className={styles.primaryBtn} disabled={volLoading}>
+              {volLoading ? <Loader2 className={styles.spin} size={20} /> : 'Submit Application'}
             </button>
           </form>
         </article>

@@ -1,13 +1,12 @@
 .section {
-    padding: 100px 20px;
+    padding: 120px 20px;
     background-color: var(--accent-maroon);
     color: white;
     position: relative;
-    overflow: hidden;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -25,17 +24,16 @@
 .formulaRows {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    /* Small gap for the horizontal lines effect */
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 300px 1fr;
-    padding: 40px;
+    grid-template-columns: 280px 1fr;
+    padding: 50px 60px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: background-color 0.3s ease;
+    align-items: flex-start;
 }
 
 .row:hover {
@@ -59,9 +57,25 @@
 }
 
 .rowValue {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.formulaItem {
+    margin-bottom: 2.5rem;
+}
+
+.formulaItem:last-child {
+    margin-bottom: 0;
+}
+
+.rowValue em {
+    font-size: 1.15rem;
+    font-style: italic;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 0.5rem;
 }
 
 .rowValue strong {

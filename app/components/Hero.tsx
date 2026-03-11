@@ -1,44 +1,56 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import styles from './Hero.module.css';
-import { projectsData } from '../our-projects/projectsData';
+
+interface Subproject {
+    id: string;
+    title: string;
+    slug: string;
+}
 
 interface FlipCardProps {
     title: string;
     subtitle: string;
     backTitle: string;
     donateHref: string;
-    projectCategory: string; // 'Sustainable' or 'Emergency'
+    projectCategory: string; // 'sustainable' or 'emergency'
 }
 
 function FlipCard({ title, subtitle, backTitle, donateHref, projectCategory }: FlipCardProps) {
+    const supabase = createClient();
     const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
     const [customAmount, setCustomAmount] = useState('');
     const [isFlipped, setIsFlipped] = useState(false);
     const [selectedSubproject, setSelectedSubproject] = useState('');
+    const [subprojects, setSubprojects] = useState<Subproject[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    // Filter projects based on category
-    // Using simple mapping: Sustainable -> 'livelihood-economic-empowerment' etc.
-    // For now, let's just grab subprojects from relevant categories
-    const relevantProjects = projectsData.filter(p => {
-        if (projectCategory === 'Sustainable') {
-            return ['livelihood-economic-empowerment', 'education-support-child-development', 'wash-program'].includes(p.id);
-        } else {
-            return ['humanitarian-emergency-response', 'religious-seasonal-welfare'].includes(p.id);
-        }
-    });
+    useEffect(() => {
+        const fetchSubprojects = async () => {
+            setLoading(true);
+            const { data } = await supabase
+                .from('subprojects')
+                .select('id, title, slug')
+                .eq('category', projectCategory.toLowerCase())
+                .order('title');
 
-    const allSubprojects = relevantProjects.flatMap(p => p.subprojects);
+            if (data) setSubprojects(data);
+            setLoading(false);
+        };
+        fetchSubprojects();
+    }, [projectCategory]);
 
     const amounts = [10, 25, 50, 100, 250, 500];
 
     const handleDonate = () => {
         const amount = selectedAmount || (customAmount ? parseInt(customAmount) : null);
-        if (amount) {
-            window.location.href = `${donateHref}?amount=${amount}`;
-        } else {
-            window.location.href = donateHref;
-        }
+        const baseUrl = donateHref;
+        const params = new URLSearchParams();
+        if (amount) params.append('amount', amount.toString());
+        if (selectedSubproject) params.append('campaign', selectedSubproject);
+
+        window.location.href = `${baseUrl}?${params.toString()}`;
     };
 
     return (
@@ -79,9 +91,10 @@ function FlipCard({ title, subtitle, backTitle, donateHref, projectCategory }: F
                             className={styles.dropdownSelect}
                             value={selectedSubproject}
                             onChange={(e) => setSelectedSubproject(e.target.value)}
+                            disabled={loading}
                         >
-                            <option value="">General Donation</option>
-                            {allSubprojects.map(sp => (
+                            <option value="">{loading ? 'Loading...' : 'General Donation'}</option>
+                            {subprojects.map(sp => (
                                 <option key={sp.id} value={sp.id}>{sp.title}</option>
                             ))}
                         </select>
@@ -177,8 +190,6 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* Bangladesh Flag Accent */}
-            <div className={styles.flagStripe} aria-hidden="true" />
         </section>
     );
 }

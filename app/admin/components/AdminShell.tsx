@@ -1,65 +1,101 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import { useAdminData } from '../AdminDataContext';
 import styles from '../AdminDashboard.module.css';
+import {
+  LayoutDashboard,
+  FolderTree,
+  Heart,
+  Image as ImageIcon,
+  BookOpen,
+  FileText,
+  Settings,
+  LogOut,
+  ExternalLink,
+  Menu,
+  X,
+  Users,
+  MessageSquare
+} from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 
 type AdminNavItem = {
   href: string;
   label: string;
   count?: number;
+  icon: any;
 };
 
 export default function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
   const {
-    message,
-    projects,
-    appeals,
-    galleryItems,
-    stories,
-    reports,
-    articles,
+    counts,
     isHydrated,
+    message
   } = useAdminData();
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
+
   const navItems: AdminNavItem[] = [
-    { href: '/admin/overview', label: 'Overview' },
-    { href: '/admin/projects', label: 'Projects', count: projects.length },
-    { href: '/admin/appeals', label: 'Appeals', count: appeals.length },
-    { href: '/admin/featured-appeals', label: 'Featured Appeals' },
-    { href: '/admin/impact-gallery', label: 'Impact Gallery', count: galleryItems.length },
-    { href: '/admin/impact-stories', label: 'Impact Stories', count: stories.length },
-    { href: '/admin/impact-reports', label: 'Impact Reports', count: reports.length },
-    { href: '/admin/blog', label: 'Blog Articles', count: articles.length },
-    { href: '/admin/settings', label: 'Settings' },
+    { href: '/admin/overview', label: 'Overview', icon: LayoutDashboard },
+    { href: '/admin/projects', label: 'Projects', icon: FolderTree, count: counts.projects },
+    { href: '/admin/appeals', label: 'Appeals', icon: Heart, count: counts.appeals },
+    { href: '/admin/impact-gallery', label: 'Impact Gallery', icon: ImageIcon, count: counts.gallery },
+    { href: '/admin/impact-stories', label: 'Impact Stories', icon: BookOpen, count: counts.stories },
+    { href: '/admin/impact-reports', label: 'Impact Reports', icon: FileText, count: counts.reports },
+    { href: '/admin/blog', label: 'Blog Articles', icon: BookOpen, count: counts.articles },
+    { href: '/admin/volunteer-applications', label: 'Volunteers', icon: Users, count: counts.volunteers },
+    { href: '/admin/contact-messages', label: 'Messages', icon: MessageSquare, count: counts.contacts },
+    { href: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   return (
     <section className={styles.page}>
-      <div className={styles.headerBlock}>
-        <h1>Admin Dashboard</h1>
-        <p>Manage projects, appeals, impact content, reports, and blog articles.</p>
-      </div>
-
-      {message ? <p className={styles.notice}>{message}</p> : null}
+      <header className={styles.adminTopBar}>
+        <div className={styles.topBarContent}>
+          <div className={styles.topBarLeft}>
+            <div className={styles.adminLogo}>HCI Admin</div>
+            <Link href="/" className={styles.viewSiteLink}>
+              <ExternalLink size={14} />
+              View Website
+            </Link>
+          </div>
+          <button onClick={handleLogout} className={styles.logoutBtn}>
+            <LogOut size={16} />
+            Logout
+          </button>
+        </div>
+      </header>
 
       <div className={styles.workspace}>
         <aside className={styles.sidebar}>
-          <h2>Sections</h2>
+          <div className={styles.sidebarHeader}>
+            <h2>Sections</h2>
+          </div>
           <nav className={styles.sidebarNav}>
             {navItems.map((item) => {
               const active = pathname === item.href;
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={active ? styles.sidebarButtonActive : styles.sidebarButton}
                 >
-                  <span>{item.label}</span>
-                  {typeof item.count === 'number' ? <small>{item.count}</small> : null}
+                  <div className={styles.navLabel}>
+                    <Icon size={18} />
+                    <span>{item.label}</span>
+                  </div>
+                  {typeof item.count === 'number' && item.count > 0 ? <small>{item.count}</small> : null}
                 </Link>
               );
             })}
@@ -67,8 +103,19 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         </aside>
 
         <section className={styles.contentArea}>
-          {!isHydrated ? <p className={styles.mutedText}>Loading stored admin data...</p> : null}
-          {children}
+          {message && (
+            <div className={styles.globalToast}>
+              {message}
+            </div>
+          )}
+          {!isHydrated ? (
+            <div className={styles.loadingArea}>
+              <div className={styles.spinner}></div>
+              <p className={styles.mutedText}>Loading stored admin data...</p>
+            </div>
+          ) : (
+            children
+          )}
         </section>
       </div>
     </section>

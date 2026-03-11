@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import styles from './AboutCTA.module.css';
@@ -20,13 +21,15 @@ const AboutCTA = () => {
                         <h2 className={styles.title}>Donate to Human Care today,</h2>
                         <p className={styles.subtitle}>So we don't need to exist tomorrow.</p>
 
-                        <motion.button
-                            className={styles.button}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            Support the mission <Heart size={24} fill="currentColor" />
-                        </motion.button>
+                        <Link href="/donate" style={{ textDecoration: 'none' }}>
+                            <motion.button
+                                className={styles.button}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                Support the mission <Heart size={24} fill="currentColor" />
+                            </motion.button>
+                        </Link>
                     </div>
 
                     <div className={styles.visual}>

@@ -1,35 +1,64 @@
-import { Download } from 'lucide-react';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Download, Loader2 } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 import styles from './ImpactReportsPage.module.css';
 
-const reports = [
-  { id: 1, title: 'Annual Report 2025', file: '#' },
-  { id: 2, title: 'Annual Report 2024', file: '#' },
-  { id: 3, title: 'Annual Report 2023', file: '#' },
-  { id: 4, title: 'Annual Report 2022', file: '#' },
-  { id: 5, title: 'Annual Report 2021', file: '#' },
-  { id: 6, title: 'Annual Report 2020', file: '#' },
-];
+type Report = {
+  id: string;
+  title: string;
+  file_url: string;
+  year: number;
+};
 
 export default function ImpactReportsPage() {
+  const supabase = createClient();
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from('impact_reports')
+        .select('*')
+        .order('year', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (data) setReports(data);
+      setLoading(false);
+    };
+    fetchReports();
+  }, []);
+
   return (
     <section className={styles.page}>
       <div className={styles.headerBlock}>
-        <h1>Annual Reports</h1>
+        <h1>Impact Reports</h1>
         <p>
-          Below you can find Human Care Initiative&apos;s Annual Reports. See the impact of your
+          Below you can find Human Care Initiative&apos;s Impact Reports. See the impact of your
           generous donations.
         </p>
       </div>
 
       <div className={styles.grid}>
-        {reports.map((report) => (
-          <article className={styles.reportCard} key={report.id}>
-            <h2>{report.title}</h2>
-            <a className={styles.downloadBtn} href={report.file}>
-              <Download size={16} /> Download
-            </a>
-          </article>
-        ))}
+        {loading ? (
+          <div className="col-span-full flex justify-center py-20">
+            <Loader2 className="animate-spin text-gray-400" size={32} />
+          </div>
+        ) : reports.length === 0 ? (
+          <div className="col-span-full py-20 text-center text-gray-400">No reports available at this time.</div>
+        ) : (
+          reports.map((report) => (
+            <article className={styles.reportCard} key={report.id}>
+              <h2>{report.title}</h2>
+              <a className={styles.downloadBtn} href={report.file_url} target="_blank" rel="noopener noreferrer">
+                <Download size={16} /> Download
+              </a>
+            </article>
+          ))
+        )}
       </div>
     </section>
   );

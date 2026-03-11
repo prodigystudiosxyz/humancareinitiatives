@@ -75,6 +75,12 @@
     filter: drop-shadow(0 0 5px rgba(209, 18, 52, 0.3));
 }
 
+.pointSelected {
+    fill: #ff0000;
+    stroke: #ffffff;
+    stroke-width: 2px;
+}
+
 .districtPoint:hover .point {
     transform: scale(1.5);
     fill: #d11234;
@@ -111,8 +117,21 @@
     width: 250px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     z-index: 10;
-    pointer-events: none;
+    pointer-events: auto;
     animation: fadeIn 0.2s ease;
+}
+
+.subLinkInline {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 0.2rem 0;
+    transition: color 0.2s ease;
+}
+
+.subLinkInline:hover {
+    color: #d11234;
+    text-decoration: underline;
 }
 
 .tooltipName {
@@ -174,6 +193,37 @@
     font-size: 1rem;
     color: #444;
     line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.activePills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.pillLink {
+    text-decoration: none;
+}
+
+.pill {
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+    transition: all 0.2s ease;
+}
+
+.pillLink:hover .pill {
+    background: #d11234;
+    color: #fff;
+    border-color: #d11234;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(209, 18, 52, 0.2);
 }
 
 @keyframes slideUp {
