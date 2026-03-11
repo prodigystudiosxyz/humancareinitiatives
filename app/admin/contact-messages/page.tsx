@@ -36,7 +36,7 @@ export default function AdminContactPage() {
             .order('created_at', { ascending: false });
 
         if (error) {
-            showMessage(error.message, 'error');
+            showMessage(error.message);
         } else {
             setMessages(data || []);
         }

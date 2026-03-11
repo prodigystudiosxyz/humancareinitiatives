@@ -36,7 +36,7 @@ export default function AdminVolunteerPage() {
             .order('created_at', { ascending: false });
 
         if (error) {
-            showMessage(error.message, 'error');
+            showMessage(error.message);
         } else {
             setApplications(data || []);
         }
@@ -50,9 +50,9 @@ export default function AdminVolunteerPage() {
             .eq('id', id);
 
         if (error) {
-            showMessage(error.message, 'error');
+            showMessage(error.message);
         } else {
-            showMessage(`Status updated to ${newStatus}`, 'success');
+            showMessage(`Status updated to ${newStatus}`);
             setApplications(prev => prev.map(app => app.id === id ? { ...app, status: newStatus } : app));
         }
     };
@@ -66,9 +66,9 @@ export default function AdminVolunteerPage() {
             .eq('id', id);
 
         if (error) {
-            showMessage(error.message, 'error');
+            showMessage(error.message);
         } else {
-            showMessage('Application deleted', 'success');
+            showMessage('Application deleted');
             setApplications(prev => prev.filter(app => app.id !== id));
         }
     };
