@@ -26,10 +26,14 @@ export default function AppealsPage() {
   useEffect(() => {
     const fetchAppeals = async () => {
       setLoading(true);
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('appeals')
         .select('*')
         .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching appeals:', error);
+      }
 
       if (data) {
         // Fallback for category if missing in DB

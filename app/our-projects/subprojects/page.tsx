@@ -40,9 +40,13 @@ function SubprojectsContent() {
             setLoading(true);
 
             // 1. Fetch projects for filter
-            const { data: projData } = await supabase
+            const { data: projData, error: projError } = await supabase
                 .from('projects')
                 .select('id, name, slug');
+
+            if (projError) {
+                console.error('Error fetching projects:', projError);
+            }
 
             if (projData) {
                 // We'll also fetch counts separately if needed, 
@@ -51,9 +55,13 @@ function SubprojectsContent() {
             }
 
             // 2. Fetch all subprojects
-            const { data: subData } = await supabase
+            const { data: subData, error: subError } = await supabase
                 .from('subprojects')
                 .select('*, projects(name, slug)');
+
+            if (subError) {
+                console.error('Error fetching subprojects:', subError);
+            }
 
             if (subData) {
                 setSubprojects(subData as unknown as Subproject[]);
