@@ -347,6 +347,38 @@
     color: var(--accent-maroon);
 }
 
+.inputStack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.textInput,
+.textArea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: var(--font-main);
+    transition: all 0.2s;
+}
+
+.textArea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.textInput:focus,
+.textArea:focus {
+    outline: none;
+    border-color: var(--accent-maroon);
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+}
+
 /* Submit Action */
 .submitSection {
     margin-top: 1rem;
@@ -385,6 +417,65 @@
     gap: 0.4rem;
     font-size: 0.75rem;
     color: #64748b;
+}
+
+/* Checkbox Styling */
+.giftAidSection {
+    margin-top: 1.5rem;
+}
+
+.giftAidLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.giftAidExplainer {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.5;
+    padding-left: 1.75rem;
+}
+
+.giftAidCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.giftAidCheckbox:checked {
+    background-color: var(--accent-maroon);
+    border-color: var(--accent-maroon);
+}
+
+.giftAidCheckbox:checked::after {
+    content: '';
+    display: block;
+    width: 0.4rem;
+    height: 0.7rem;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.giftAidCheckbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
 }
 
 @media (max-width: 900px) {

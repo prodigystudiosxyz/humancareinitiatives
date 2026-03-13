@@ -45,6 +45,7 @@ export default function ImpactStories() {
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [swipeDirection, setSwipeDirection] = useState(0); // 1 for right (next), -1 for left (prev)
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 640);
@@ -59,41 +60,59 @@ export default function ImpactStories() {
         const { data } = await supabase
             .from('impact_stories')
             .select('*')
-            .order('display_order', { ascending: true });
+            .order('created_at', { ascending: false })
+            .limit(3);
 
         if (data) setStories(data);
         setLoading(false);
     };
 
     const handleDragEnd = (event: any, info: any, storyId: string) => {
-        const isExpanded = expandedId === storyId;
-
-        if (Math.abs(info.offset.x) > 50) {
-            if (!isExpanded) {
-                setExpandedId(storyId);
-            } else {
-                setStories((prev) => {
-                    const newStories = [...prev];
-                    const swiped = newStories.shift();
-                    if (swiped) newStories.push(swiped);
-                    return newStories;
-                });
-                setExpandedId(null);
-            }
+        const threshold = 100;
+        if (info.offset.x > threshold) {
+            // Swipe Right -> Next (move top to back)
+            setSwipeDirection(1);
+            setStories((prev) => {
+                const newStories = [...prev];
+                const swiped = newStories.shift();
+                if (swiped) newStories.push(swiped);
+                return newStories;
+            });
+            setExpandedId(null);
+        } else if (info.offset.x < -threshold) {
+            // Swipe Left -> Previous (move last to front)
+            setSwipeDirection(-1);
+            setStories((prev) => {
+                const newStories = [...prev];
+                const last = newStories.pop();
+                if (last) newStories.unshift(last);
+                return newStories;
+            });
+            setExpandedId(null);
         }
     };
 
     const MOBILE_WIDTH = 320;
     const MOBILE_HEIGHT = 440;
-    const DESKTOP_WIDTH = 440;
+    const DESKTOP_WIDTH = 480; // Slightly wider default
     const DESKTOP_HEIGHT = 560;
 
-    const expandedW = isMobile ? 320 : 780;
-    const expandedH = isMobile ? 640 : DESKTOP_HEIGHT;
+    const expandedW = isMobile ? 320 : 840; // Widened as requested
+    const expandedH = isMobile ? 580 : DESKTOP_HEIGHT;
     const defaultW = isMobile ? MOBILE_WIDTH : DESKTOP_WIDTH;
     const defaultH = isMobile ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
-    if (loading) return null;
+    if (loading) {
+        return (
+            <section className={styles.impactSection}>
+                <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>Fetching stories...</p>
+                </div>
+            </section>
+        );
+    }
+
     if (stories.length === 0) return null;
 
     return (
@@ -114,25 +133,44 @@ export default function ImpactStories() {
                         <AnimatePresence mode="popLayout">
                             {stories.map((story, index) => {
                                 const isTop = index === 0;
-                                const isExpanded = isTop && expandedId === story.id;
-                                const xOffset = isExpanded ? -(expandedW - defaultW) / 2 : index * 20;
+                                const isExpanded = isTop;
+                                // Shift logic: center the top card, and stack others behind
+                                const xOffset = isExpanded ? 0 : index * 20;
+
+                                const cardVariants = {
+                                    enter: (direction: number) => ({
+                                        x: direction > 0 ? 800 : -800,
+                                        opacity: 0,
+                                        scale: 0.8,
+                                    }),
+                                    center: {
+                                        x: xOffset,
+                                        y: isExpanded && isMobile ? -(expandedH - defaultH) / 2 : index * 15,
+                                        width: isExpanded ? expandedW : defaultW,
+                                        height: isExpanded ? expandedH : defaultH,
+                                        rotate: isExpanded ? 0 : index * 2,
+                                        scale: 1 - index * 0.05,
+                                        opacity: 1 - index * 0.15,
+                                        zIndex: stories.length - index,
+                                    },
+                                    exit: (direction: number) => ({
+                                        x: direction > 0 ? 800 : -800, // Move in swipe direction
+                                        opacity: 0,
+                                        scale: 0.8,
+                                        rotate: direction > 0 ? 20 : -20,
+                                        transition: { duration: 0.4 }
+                                    })
+                                };
 
                                 return (
                                     <motion.div
                                         key={story.id}
                                         className={styles.storyCard}
-                                        style={{
-                                            zIndex: stories.length - index,
-                                        }}
-                                        animate={{
-                                            x: xOffset,
-                                            y: isExpanded && isMobile ? -(expandedH - defaultH) / 2 : index * 15,
-                                            width: isExpanded ? expandedW : defaultW,
-                                            height: isExpanded ? expandedH : defaultH,
-                                            rotate: isExpanded ? 0 : index * 2,
-                                            scale: 1 - index * 0.05,
-                                            opacity: 1 - index * 0.15,
-                                        }}
+                                        variants={cardVariants}
+                                        initial="enter"
+                                        animate="center"
+                                        exit="exit"
+                                        custom={swipeDirection}
                                         transition={{
                                             type: "spring",
                                             stiffness: 300,
@@ -140,54 +178,47 @@ export default function ImpactStories() {
                                         }}
                                         drag={isTop ? "x" : false}
                                         dragConstraints={{ left: 0, right: 0 }}
+                                        dragElastic={0.1}
+                                        dragMomentum={false}
                                         onDragEnd={(e, info) => handleDragEnd(e, info, story.id)}
                                         whileDrag={{ scale: 1.02 }}
-                                        exit={{
-                                            x: 500,
-                                            opacity: 0,
-                                            scale: 0.8,
-                                            rotate: 20,
-                                            transition: { duration: 0.4 }
-                                        }}
+                                        whileTap={{ scale: 1 }}
                                     >
                                         <div className={styles.cardDecoration} />
 
                                         <div
                                             className={styles.cardInnerLayout}
-                                            style={{ flexDirection: isExpanded && isMobile ? 'column' : 'row' }}
+                                            style={{ flexDirection: isMobile ? 'column' : 'row' }}
                                         >
-                                            <div
-                                                className={styles.cardTextSide}
-                                                style={{
-                                                    flex: isMobile && isExpanded ? '1 1 auto' : `0 0 ${defaultW - 80}px`,
-                                                }}
-                                            >
+                                            <div className={styles.cardImageSide}>
+                                                <img
+                                                    src={story.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"}
+                                                    alt={story.title}
+                                                    className={styles.storyImage}
+                                                />
+                                            </div>
+
+                                            <div className={styles.cardTextSide}>
                                                 <h3 className={styles.storyTitle}>{story.title}</h3>
                                                 <div
                                                     className={styles.storyText}
-                                                    dangerouslySetInnerHTML={{ __html: story.content }}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: (story.content || '')
+                                                            .replace(/\\+n/g, '<br />')
+                                                            .replace(/\n/g, '<br />')
+                                                    }}
                                                 />
 
                                                 {isTop && (
                                                     <div className={styles.clickHint}>
-                                                        <span>{isExpanded ? 'Drag again for next' : 'Drag to explore more'}</span>
-                                                        <ArrowRight size={18} />
+                                                        <span>Swipe left/right</span>
+                                                        <div className={styles.swipeIndicators}>
+                                                            <ArrowRight size={16} className={styles.prevIcon} />
+                                                            <ArrowRight size={16} />
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
-
-                                            <AnimatePresence>
-                                                {isExpanded && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, scale: 0.9, width: isMobile ? '100%' : 0 }}
-                                                        animate={{ opacity: 1, scale: 1, width: isMobile ? '100%' : '100%' }}
-                                                        exit={{ opacity: 0, scale: 0.9, width: isMobile ? '100%' : 0 }}
-                                                        className={styles.cardImageSide}
-                                                    >
-                                                        <img src={story.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"} alt={story.title} className={styles.storyImage} />
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
                                         </div>
                                     </motion.div>
                                 );

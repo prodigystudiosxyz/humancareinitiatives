@@ -10,6 +10,7 @@ export default function DonationPanel({ appealId }: { appealId: string }) {
   const [mode, setMode] = useState<'one-time' | 'monthly'>('one-time');
   const [selectedAmount, setSelectedAmount] = useState(50);
   const [customAmount, setCustomAmount] = useState('');
+  const [giftAid, setGiftAid] = useState(false);
 
   const amount = customAmount ? Number(customAmount) || 0 : selectedAmount;
 
@@ -64,10 +65,24 @@ export default function DonationPanel({ appealId }: { appealId: string }) {
             />
           </div>
 
-          <Link href={`/donate?campaign=${appealId}&amount=${amount}&mode=${mode}`} className={styles.donateBtn}>
+          <div className={styles.checkboxWrap}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={giftAid}
+                onChange={(e) => setGiftAid(e.target.checked)}
+                className={styles.checkbox}
+              />
+              <span>Add Gift Aid to my donation</span>
+            </label>
+            <p className={styles.giftAidExplainer}>
+              Gift Aid is a UK government scheme that allows charities to claim back the basic rate of tax on your donation, increasing its value at no extra cost to you.
+            </p>
+          </div>
+
+          <Link href={`/donate?campaign=${appealId}&amount=${amount}&mode=${mode}&giftAid=${giftAid}`} className={styles.donateBtn}>
             Donate
           </Link>
-          <p className={styles.secureNote}>Is my donation secure? · Tax deductible</p>
         </div>
       </div>
     </div>

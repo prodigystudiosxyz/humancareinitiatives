@@ -12,78 +12,75 @@
 }
 
 .sectionHeader {
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 60px;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .sectionTitle {
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     color: #1a1a1a;
+    transition: all 0.3s ease;
 }
 
 /* ===========================
-   Tabs System
+   Tabs System (Modern Toggle)
    =========================== */
 .tabsContainer {
     display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 60px;
+    background-color: #f1f5f9;
+    padding: 6px;
+    border-radius: 100px;
+    gap: 0;
+    margin-bottom: 0;
     position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .tabBtn {
-    background: none;
+    background: transparent;
     border: none;
-    color: rgba(0, 0, 0, 0.45);
-    font-size: 1.1rem;
+    color: #64748b;
+    font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
-    padding: 0.5rem 0;
-    transition: all 0.3s ease;
+    padding: 10px 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     font-family: inherit;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    border-radius: 100px;
+    z-index: 1;
 }
 
 .tabBtn:hover {
-    color: rgba(0, 0, 0, 0.8);
+    color: #1e293b;
 }
 
 .tabBtn::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: transparent;
-    transition: all 0.3s ease;
-    border-radius: 10px;
+    display: none;
 }
 
 /* Active Sustainable Tab */
 .tabBtnActiveGreen {
-    color: #22b566 !important;
-}
-
-.tabBtnActiveGreen::after {
+    color: #ffffff !important;
     background-color: #22b566;
-    box-shadow: 0 0 15px rgba(34, 181, 102, 0.5);
+    box-shadow: 0 4px 12px rgba(34, 181, 102, 0.25);
 }
 
 /* Active Emergency Tab */
 .tabBtnActiveRed {
-    color: #f42a41 !important;
-}
-
-.tabBtnActiveRed::after {
+    color: #ffffff !important;
     background-color: #f42a41;
-    box-shadow: 0 0 15px rgba(244, 42, 65, 0.5);
+    box-shadow: 0 4px 12px rgba(244, 42, 65, 0.25);
 }
 
 /* ===========================
@@ -290,15 +287,29 @@
 }
 
 @media (max-width: 768px) {
+    .sectionHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 40px;
+    }
+
+    .sectionTitle {
+        font-size: 2.22rem;
+    }
+
     .projectsGrid {
         grid-template-columns: 1fr;
     }
 
     .tabsContainer {
-        gap: 1.5rem;
+        width: 100%;
+        gap: 0;
     }
 
     .tabBtn {
-        font-size: 1rem;
+        flex: 1;
+        font-size: 0.85rem;
+        padding: 10px 12px;
     }
 }

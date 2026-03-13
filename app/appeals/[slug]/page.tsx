@@ -60,7 +60,6 @@ export default async function AppealDetailPage({ params }: PageProps) {
               <div className={styles.officialBadge}>{initials}</div>
               <div>
                 <h1 className={styles.officialTitle}>Human Care Initiative</h1>
-                <p className={styles.officialMeta}>Official Appeal</p>
               </div>
             </div>
             <h2 className={styles.appealTitle}>{appeal.title}</h2>

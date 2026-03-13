@@ -125,6 +125,8 @@ create table public.donations (
   type text not null check (type in ('zakat', 'sadaqah', 'appeal', 'project')),
   target_id uuid, -- Can be an appeal ID or subproject ID
   amount numeric not null check (amount > 0),
+  gift_aid boolean default false not null,
+  donor_address text,
   status text not null default 'completed',
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

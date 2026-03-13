@@ -33,14 +33,20 @@ function DonateContent() {
     // Form state
     const [frequency, setFrequency] = useState<Frequency>('once');
     const [authMode, setAuthMode] = useState<AuthMode>('guest');
-    const [selectedCampaignId, setSelectedCampaignId] = useState<string>('general');
+    const [selectedCampaignId, setSelectedCampaignId] = useState<string>('zakat');
     const [amount, setAmount] = useState<Amount>(30);
     const [customAmount, setCustomAmount] = useState<string>('');
+    const [giftAid, setGiftAid] = useState(false);
 
     // UI state
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+
+    // Personal details state
+    const [donorName, setDonorName] = useState('');
+    const [donorEmail, setDonorEmail] = useState('');
+    const [donorAddress, setDonorAddress] = useState('');
 
     // Data state
     const [campaigns, setCampaigns] = useState<CampaignOption[]>([]);
@@ -58,7 +64,6 @@ function DonateContent() {
             ]);
 
             const options: CampaignOption[] = [
-                { id: 'general', title: 'Where Most Needed (General)', type: 'project', slug: 'general' },
                 { id: 'zakat', title: 'Zakat', type: 'project', slug: 'zakat' },
                 { id: 'sadaqah', title: 'Sadaqah', type: 'project', slug: 'sadaqah' }
             ];
@@ -120,6 +125,10 @@ function DonateContent() {
                 setFrequency('monthly');
             }
 
+            if (searchParams.get('giftAid') === 'true') {
+                setGiftAid(true);
+            }
+
             setLoading(false);
         };
 
@@ -146,12 +155,28 @@ function DonateContent() {
             return;
         }
 
+        if (!donorName || !donorEmail) {
+            setErrorMsg('Please enter your name and email address.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        if (giftAid && !donorAddress) {
+            setErrorMsg('Address is mandatory when Gift Aid is selected.');
+            setIsSubmitting(false);
+            return;
+        }
+
         const campaign = campaigns.find(c => c.id === selectedCampaignId);
 
         const { error } = await supabase.from('donations').insert({
             type: campaign?.type || 'project',
-            target_id: selectedCampaignId === 'general' || selectedCampaignId === 'zakat' || selectedCampaignId === 'sadaqah' ? null : selectedCampaignId,
+            target_id: selectedCampaignId === 'zakat' || selectedCampaignId === 'sadaqah' ? null : selectedCampaignId,
+            donor_name: donorName,
+            donor_email: donorEmail,
+            donor_address: giftAid ? donorAddress : null,
             amount: donationAmount,
+            gift_aid: giftAid,
             status: 'completed', // Mocking a successful payment
             frequency: frequency
         });
@@ -259,6 +284,38 @@ function DonateContent() {
                             </div>
                         </div>
 
+                        {/* Personal Details */}
+                        <div className={styles.sectionGroup}>
+                            <label className={styles.sectionLabel}>Personal Details</label>
+                            <div className={styles.inputStack}>
+                                <input
+                                    type="text"
+                                    placeholder="Full Name"
+                                    className={styles.textInput}
+                                    value={donorName}
+                                    onChange={(e) => setDonorName(e.target.value)}
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Email Address"
+                                    className={styles.textInput}
+                                    value={donorEmail}
+                                    onChange={(e) => setDonorEmail(e.target.value)}
+                                    required
+                                />
+                                {giftAid && (
+                                    <textarea
+                                        placeholder="Full Address (Mandatory for Gift Aid)"
+                                        className={styles.textArea}
+                                        value={donorAddress}
+                                        onChange={(e) => setDonorAddress(e.target.value)}
+                                        required
+                                    />
+                                )}
+                            </div>
+                        </div>
+
                         {/* Amount Selection */}
                         <div className={styles.sectionGroup}>
                             <label className={styles.sectionLabel}>
@@ -293,15 +350,27 @@ function DonateContent() {
                             </div>
                         </div>
 
+                        <div className={styles.giftAidSection}>
+                            <label className={styles.giftAidLabel}>
+                                <input
+                                    type="checkbox"
+                                    checked={giftAid}
+                                    onChange={(e) => setGiftAid(e.target.checked)}
+                                    className={styles.giftAidCheckbox}
+                                />
+                                <span>Add Gift Aid to my donation</span>
+                            </label>
+                            <p className={styles.giftAidExplainer}>
+                                Gift Aid is a UK government scheme that allows charities to claim back the basic rate of tax on your donation, increasing its value at no extra cost to you.
+                            </p>
+                        </div>
+
                         {/* Submit Action */}
                         <div className={styles.submitSection}>
                             {errorMsg && <p style={{ color: '#800000', fontSize: '0.875rem', marginBottom: '1rem' }}>{errorMsg}</p>}
                             <button className={styles.submitBtn} onClick={handleDonate} disabled={isSubmitting}>
                                 {isSubmitting ? <Loader2 className="animate-spin" /> : <>Donate £{displayAmount} <ArrowRight size={20} /></>}
                             </button>
-                            <div className={styles.secureText}>
-                                <Lock size={12} /> Secure 256-bit encrypted payment
-                            </div>
                         </div>
 
                     </div>

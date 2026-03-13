@@ -93,7 +93,7 @@ function FlipCard({ title, subtitle, backTitle, donateHref, projectCategory }: F
                             onChange={(e) => setSelectedSubproject(e.target.value)}
                             disabled={loading}
                         >
-                            <option value="">{loading ? 'Loading...' : 'General Donation'}</option>
+                            <option value="">{loading ? 'Loading...' : 'Select Program'}</option>
                             {subprojects.map(sp => (
                                 <option key={sp.id} value={sp.id}>{sp.title}</option>
                             ))}
@@ -127,7 +127,6 @@ function FlipCard({ title, subtitle, backTitle, donateHref, projectCategory }: F
                                 setCustomAmount(e.target.value);
                                 setSelectedAmount(null);
                             }}
-                            onClick={(e) => e.stopPropagation()}
                         />
                     </div>
 

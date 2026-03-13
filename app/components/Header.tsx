@@ -2,10 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, User, Heart, Menu, X } from 'lucide-react';
+import { ChevronDown, User, Heart, Menu, X, ChevronRight } from 'lucide-react';
 import styles from './Header.module.css';
 
 import { createClient } from '@/utils/supabase/client';
+
+interface NavProject {
+    title: string;
+    slug: string;
+    project_slug: string;
+}
+
+interface ParentProject {
+    name: string;
+    slug: string;
+    subprojects: NavProject[];
+}
 
 export default function Header() {
     const supabase = createClient();
@@ -14,21 +26,37 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<'impact' | 'projects' | null>(null);
-    const [navProjects, setNavProjects] = useState<{ title: string, slug: string, project_slug: string }[]>([]);
+    const [openSubDropdown, setOpenSubDropdown] = useState<string | null>(null);
+    const [groupedProjects, setGroupedProjects] = useState<ParentProject[]>([]);
 
     useEffect(() => {
         const fetchNavProjects = async () => {
             const { data } = await supabase
                 .from('subprojects')
-                .select('title, slug, projects(slug)')
+                .select('title, slug, projects(name, slug)')
                 .eq('is_navbar_project', true)
                 .order('title');
+
             if (data) {
-                setNavProjects(data.map((s: any) => ({
-                    title: s.title,
-                    slug: s.slug,
-                    project_slug: s.projects?.slug || ''
-                })));
+                const groups: { [key: string]: ParentProject } = {};
+                data.forEach((s: any) => {
+                    const pName = s.projects?.name || 'Other';
+                    const pSlug = s.projects?.slug || 'other';
+
+                    if (!groups[pSlug]) {
+                        groups[pSlug] = {
+                            name: pName,
+                            slug: pSlug,
+                            subprojects: []
+                        };
+                    }
+                    groups[pSlug].subprojects.push({
+                        title: s.title,
+                        slug: s.slug,
+                        project_slug: pSlug
+                    });
+                });
+                setGroupedProjects(Object.values(groups));
             }
         };
         fetchNavProjects();
@@ -46,6 +74,7 @@ export default function Header() {
     useEffect(() => {
         setMobileMenuOpen(false);
         setOpenDropdown(null);
+        setOpenSubDropdown(null);
     }, [pathname]);
 
     useEffect(() => {
@@ -64,6 +93,12 @@ export default function Header() {
     const closeMobileMenu = () => setMobileMenuOpen(false);
     const toggleDropdown = (key: 'impact' | 'projects') => {
         setOpenDropdown((prev) => (prev === key ? null : key));
+        setOpenSubDropdown(null);
+    };
+
+    const toggleSubDropdown = (e: React.MouseEvent, slug: string) => {
+        e.stopPropagation();
+        setOpenSubDropdown((prev) => (prev === slug ? null : slug));
     };
 
     return (
@@ -123,15 +158,31 @@ export default function Header() {
                     </button>
                     <div className={styles.dropdownMenu}>
                         <Link href="/our-projects" className={styles.dropdownLink} onClick={closeMobileMenu}>All Projects</Link>
-                        {navProjects.map(proj => (
-                            <Link
-                                key={proj.slug}
-                                href={`/our-projects/${proj.project_slug}/${proj.slug}`}
-                                className={styles.dropdownLink}
-                                onClick={closeMobileMenu}
+                        {groupedProjects.map(parent => (
+                            <div
+                                key={parent.slug}
+                                className={`${styles.nestedDropdownContainer} ${openSubDropdown === parent.slug ? styles.subDropdownOpen : ''}`}
                             >
-                                {proj.title}
-                            </Link>
+                                <div
+                                    className={styles.parentProjectBtn}
+                                    onClick={(e) => toggleSubDropdown(e, parent.slug)}
+                                >
+                                    <span>{parent.name}</span>
+                                    <ChevronRight size={14} className={styles.chevronRight} />
+                                </div>
+                                <div className={styles.subDropdownMenu}>
+                                    {parent.subprojects.map(sub => (
+                                        <Link
+                                            key={sub.slug}
+                                            href={`/our-projects/${sub.project_slug}/${sub.slug}`}
+                                            className={styles.dropdownLink}
+                                            onClick={closeMobileMenu}
+                                        >
+                                            {sub.title}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 .impactSection {
     background-color: #ffffff;
     color: #1a1a1a;
-    padding: 120px 5%;
+    padding: 120px 8% 120px 5%;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -12,8 +12,8 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 6rem;
+    align-items: center;
+    gap: 4rem;
 }
 
 /* ===========================
@@ -90,7 +90,8 @@
 
 .cardStack {
     position: relative;
-    width: 440px;
+    width: 840px;
+    /* Match expandedW */
     height: 560px;
 }
 
@@ -102,7 +103,7 @@
     height: 100%;
     background: #ffffff;
     border-radius: 32px;
-    padding: 2.5rem;
+    padding: 3rem 4rem 3rem 3rem;
     display: flex;
     flex-direction: column;
     box-shadow:
@@ -120,7 +121,7 @@
 
 .cardInnerLayout {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     height: 100%;
     width: 100%;
     position: relative;
@@ -128,17 +129,21 @@
 }
 
 .cardTextSide {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
     height: 100%;
 }
 
 .cardImageSide {
     position: relative;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    flex: 1;
+    flex: 0 0 52%;
     min-width: 0;
+    height: 100%;
 }
 
 .storyImage {
@@ -146,6 +151,31 @@
     height: 100%;
     object-fit: cover;
     border-radius: 16px;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 100%;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(128, 0, 0, 0.1);
+    border-top-color: var(--accent-maroon);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .cardDecoration {
@@ -160,18 +190,22 @@
 }
 
 .storyTitle {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: var(--accent-maroon);
-    margin-bottom: 1.25rem;
-    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
 }
 
 .storyText {
-    font-size: 1.25rem;
-    color: #333;
-    line-height: 1.6;
+    font-size: 1.15rem;
+    color: #444;
+    line-height: 1.7;
     font-weight: 500;
+    white-space: pre-wrap;
+    text-align: justify;
+    hyphens: auto;
 }
 
 .clickHint {
@@ -185,6 +219,16 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     padding-top: 2rem;
+}
+
+.swipeIndicators {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.prevIcon {
+    transform: rotate(180deg);
 }
 
 /* ===========================

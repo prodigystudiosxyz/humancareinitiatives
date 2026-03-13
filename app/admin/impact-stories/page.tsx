@@ -1,12 +1,12 @@
 'use client';
 
-import { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useState, useEffect, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { StoryItem } from '../types';
 import styles from '../AdminDashboard.module.css';
 import { Modal, AdminCard, AdminButton } from '../components/AdminUI';
 import { useAdminData } from '../AdminDataContext';
-import { BookOpen, Plus, Edit2, Trash2, GripVertical } from 'lucide-react';
+import { BookOpen, Plus, Edit2, Trash2, GripVertical, Upload } from 'lucide-react';
 
 export default function AdminImpactStoriesPage() {
   const supabase = createClient();
@@ -14,7 +14,9 @@ export default function AdminImpactStoriesPage() {
   const [stories, setStories] = useState<StoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState<Partial<StoryItem>>({
     title: '',
@@ -39,6 +41,32 @@ export default function AdminImpactStoriesPage() {
   useEffect(() => {
     fetchStories();
   }, []);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadLoading(true);
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `impact-stories/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('media')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      showMessage(`Upload failed: ${uploadError.message}`);
+    } else {
+      const { data: { publicUrl } } = supabase.storage
+        .from('media')
+        .getPublicUrl(filePath);
+
+      setForm(prev => ({ ...prev, image_url: publicUrl }));
+      showMessage('Image uploaded successfully.');
+    }
+    setUploadLoading(false);
+  };
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -230,12 +258,34 @@ export default function AdminImpactStoriesPage() {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Cover Image URL</label>
-            <input
-              value={form.image_url || ''}
-              onChange={(event) => setForm((prev) => ({ ...prev, image_url: event.target.value }))}
-              placeholder="https://images.unsplash.com/..."
-            />
+            <label>Cover Image</label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input
+                value={form.image_url || ''}
+                onChange={(event) => setForm((prev) => ({ ...prev, image_url: event.target.value }))}
+                placeholder="Image URL or upload"
+                style={{ flex: 1 }}
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                accept="image/*"
+                style={{ display: 'none' }}
+              />
+              <AdminButton
+                type="button"
+                variant="secondary"
+                onClick={() => fileInputRef.current?.click()}
+                loading={uploadLoading}
+              >
+                <Upload size={16} />
+                Upload
+              </AdminButton>
+            </div>
+            {form.image_url && (
+              <img src={form.image_url} alt="Preview" className={styles.thumbnailPreview} />
+            )}
           </div>
 
           <div className={styles.formGroup}>

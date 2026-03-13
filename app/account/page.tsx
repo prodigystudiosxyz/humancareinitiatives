@@ -170,7 +170,7 @@ export default function AccountPage() {
                 {donations.map((donation) => (
                   <div key={donation.id} className={styles.listItem}>
                     <div>
-                      <strong>{donation.subprojects?.title || donation.appeals?.title || 'General Donation'}</strong>
+                      <strong>{donation.subprojects?.title || donation.appeals?.title || 'Direct Donation'}</strong>
                       <p>{new Date(donation.created_at).toLocaleDateString()}</p>
                     </div>
                     <span className={styles.amount}>£{donation.amount}</span>

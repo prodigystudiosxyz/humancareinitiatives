@@ -44,7 +44,6 @@ export default async function SubprojectPage({ params }: Props) {
                             <div className={styles.officialBadge}>P</div>
                             <div>
                                 <div className={styles.officialTitle}>{subproject.title}</div>
-                                <div className={styles.officialMeta}>Part of {projectData?.name}</div>
                             </div>
                         </div>
 

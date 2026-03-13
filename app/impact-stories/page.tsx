@@ -1,45 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import styles from './ImpactStoriesPage.module.css';
 
 type Story = {
-  id: number;
+  id: string;
   title: string;
-  description: string;
-  image: string;
+  content: string;
+  image_url: string;
 };
 
-const stories: Story[] = [
-  {
-    id: 101,
-    title: 'Meet Sabina!',
-    description: 'Human Care gave her a cow. Selling the offspring and produce, she purchased a piece of farming land. She and her family are now only Allah dependent!',
-    image: 'https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 102,
-    title: 'Meet Zaheer!',
-    description: 'Zaheer lived in our supported orphanage home as a child, and we now fund him through university. We follow through with our orphans and help them achieve their childhood dreams!',
-    image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 103,
-    title: 'Meet Amina!',
-    description: 'Amina\'s village had no clean water for miles. Human Care installed a deep tube well. Now she and 40 other families have instant access to safe, clean water every single day.',
-    image: 'https://images.unsplash.com/photo-1536965111000-f1c50e29b43e?auto=format&fit=crop&w=1000&q=80',
-  },
-];
-
 export default function ImpactStoriesPage() {
-  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const supabase = createClient();
+  const [stories, setStories] = useState<Story[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
-  const handleFlip = (id: number) => {
+  useEffect(() => {
+    fetchStories();
+  }, []);
+
+  const fetchStories = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from('impact_stories')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (data) setStories(data);
+    setLoading(false);
+  };
+
+  const handleFlip = (id: string) => {
     setFlippedCards((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
+
+  const processContent = (content: string) => {
+    return content
+      .replace(/\\+n/g, '<br />')
+      .replace(/\n/g, '<br />');
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>Loading stories...</p>
+      </div>
+    );
+  }
 
   return (
     <section className={styles.page}>
@@ -61,14 +74,17 @@ export default function ImpactStoriesPage() {
             >
               <div className={styles.cardInner}>
                 <article className={styles.cardFront}>
-                  <img src={story.image} alt={story.title} className={styles.cardImage} />
+                  <img src={story.image_url} alt={story.title} className={styles.cardImage} />
                   <div className={styles.hoverTitle}>{story.title}</div>
                   <div className={styles.viewStoryTag}>View Story</div>
                 </article>
 
                 <article className={styles.cardBack}>
                   <h2>{story.title}</h2>
-                  <p>{story.description}</p>
+                  <div
+                    className={styles.storyContent}
+                    dangerouslySetInnerHTML={{ __html: processContent(story.content) }}
+                  />
                 </article>
               </div>
             </button>

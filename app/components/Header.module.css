@@ -192,6 +192,56 @@
     color: var(--accent-maroon);
 }
 
+.nestedDropdownContainer {
+    position: relative;
+    width: 100%;
+}
+
+.parentProjectBtn {
+    padding: 0.75rem 1.5rem;
+    color: var(--primary-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 100%;
+}
+
+.parentProjectBtn:hover {
+    background-color: rgba(128, 0, 0, 0.05);
+    color: var(--accent-maroon);
+}
+
+.subDropdownMenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: var(--primary-bg);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 220px;
+    padding: 0.5rem 0;
+    display: none;
+    flex-direction: column;
+    z-index: 11;
+    margin-left: 2px;
+}
+
+.nestedDropdownContainer:hover .subDropdownMenu {
+    display: flex;
+}
+
+.chevronRight {
+    transition: transform 0.2s ease;
+}
+
+.nestedDropdownContainer:hover .chevronRight {
+    transform: translateX(3px);
+}
+
 .actions {
     display: flex;
     align-items: center;
